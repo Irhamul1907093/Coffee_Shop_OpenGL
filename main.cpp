@@ -26,8 +26,8 @@ void drawCube(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 model, fl
 void axis(unsigned int& cubeVAO, Shader& lightingShader);
 void bed(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether);
 void floor(unsigned int& cubeVAO, Shader& lightingShader);
-void frontWall(unsigned int& cubeVAO, Shader& lightingShader, Cylinder& cylinder, HemiSphere& hemisphere, Cone& cone);
-void rightWall(unsigned int& cubeVAO, Shader& lightingShader, CutCone& cone);
+void frontWall(unsigned int& cubeVAO, Shader& lightingShader, Cylinder& cylinder, HemiSphere& hemisphere, Cone& cone, CutCone& con);
+void rightWall(unsigned int& cubeVAO, Shader& lightingShader, CutCone& cone, Cylinder& cylinder);
 void ambienton_off(Shader& lightingShader);
 void diffuse_on_off(Shader& lightingShader);
 void specular_on_off(Shader& lightingShader);
@@ -73,7 +73,8 @@ float scale_Y = 1.0;
 float scale_Z = 1.0;
 
 // camera
-Camera camera(glm::vec3(0.0f, 1.1f, -5.2f));
+//Camera camera(glm::vec3(0.0f, 1.1f, -5.2f));
+Camera camera(glm::vec3(-11.0f, 14.1f, 12.2f));
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -467,12 +468,12 @@ int main()
         model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
         sphere.drawSphere(lightingShader, model);
 
-        //bed(cubeVAO, lightingShader, model);
+        bed(cubeVAO, lightingShader, model);
         //draw floor
         floor(cubeVAO, lightingShader);
         //axis(cubeVAO, lightingShader);
-        frontWall(cubeVAO, lightingShader, cylinder, hemisphere, cone);
-        rightWall(cubeVAO, lightingShader, cutcone);
+        frontWall(cubeVAO, lightingShader, cylinder, hemisphere, cone, cutcone);
+        rightWall(cubeVAO, lightingShader, cutcone, cylinder);
 
         /*glm::mat4 sphereTranslate = glm::translate(identityMatrix, glm::vec3(-13.0f, 4.4f, -4.3f)); // Slightly above the table
         glm::mat4 sphereScale = glm::scale(identityMatrix, glm::vec3(0.5f, 0.5f, 0.5f));          // Adjust sphere size
@@ -653,8 +654,8 @@ void floor(unsigned int& cubeVAO, Shader& lightingShader)
     glm::mat4 translate = glm::mat4(1.0f);
     //glm::mat4 translate2 = glm::mat4(1.0f);
     glm::mat4 scale = glm::mat4(1.0f);
-    scale = glm::scale(identityMatrix, glm::vec3(60.0, 0.2, 60.0));
-    translate = glm::translate(identityMatrix, glm::vec3(-9.0, -1.0, -5.0));
+    scale = glm::scale(identityMatrix, glm::vec3(100.0, 0.2, 70.0));
+    translate = glm::translate(identityMatrix, glm::vec3(-46.0, -1.0, -5.0));
     glm::mat4 model = translate * scale;
     drawCube(cubeVAO, lightingShader, model, 1.0, 1.0, 1.0, 32.0);
 
@@ -669,7 +670,7 @@ void floor(unsigned int& cubeVAO, Shader& lightingShader)
     model = translate * scale;
     //drawCube(cubeVAO, lightingShader, model, 0.5, 0.5, 0.5, 32.0); */
 }
-void frontWall(unsigned int& cubeVAO, Shader& lightingShader, Cylinder& cylinder, HemiSphere& hemisphere, Cone& cone)
+void frontWall(unsigned int& cubeVAO, Shader& lightingShader, Cylinder& cylinder, HemiSphere& hemisphere, Cone& cone, CutCone& cutcone)
 {
     lightingShader.use();
     //base
@@ -679,36 +680,165 @@ void frontWall(unsigned int& cubeVAO, Shader& lightingShader, Cylinder& cylinder
     glm::mat4 rotation = glm::mat4(1.0f);
     glm::mat4 model = translate * scale;
     //window wall
-    scale = glm::scale(identityMatrix, glm::vec3(0.1, 8.0, 40.0));
-    translate = glm::translate(identityMatrix, glm::vec3(30.9, -0.8, -5.0));
+    scale = glm::scale(identityMatrix, glm::vec3(0.1, 8.0, 70.0));
+    translate = glm::translate(identityMatrix, glm::vec3(50.9, -0.8, -5.0));
+    model = translate * scale;
+    drawCube(cubeVAO, lightingShader, model, 0.565f, 0.933f, 0.565f, 32.0);
+    //back wall
+    scale = glm::scale(identityMatrix, glm::vec3(62.0, 8.0, 0.1));
+    translate = glm::translate(identityMatrix, glm::vec3(-10.0, -0.8, 65.0));
     model = translate * scale;
     drawCube(cubeVAO, lightingShader, model, 0.565f, 0.933f, 0.565f, 32.0);
 
     //cash counter wall
-    scale = glm::scale(identityMatrix, glm::vec3(20.0, 8.0, 0.1));
-    translate = glm::translate(identityMatrix, glm::vec3(1.0, -0.8, 24.0));
+    scale = glm::scale(identityMatrix, glm::vec3(30.0, 8.0, 0.1));
+    translate = glm::translate(identityMatrix, glm::vec3(1.0, -0.8, 40.0));
+    model = translate * scale;
+    drawCube(cubeVAO, lightingShader, model, 0.933f, 0.510f, 0.933f, 32.0);
+    //right side wall
+    scale = glm::scale(identityMatrix, glm::vec3(0.1, 8.0, 15.0));
+    translate = glm::translate(identityMatrix, glm::vec3(1.0, -0.8, 40.0));
+    model = translate * scale;
+    drawCube(cubeVAO, lightingShader, model, 0.933f, 0.510f, 0.933f, 32.0);
+    //left side wall
+    scale = glm::scale(identityMatrix, glm::vec3(0.1, 8.0, 15.0));
+    translate = glm::translate(identityMatrix, glm::vec3(31.0, -0.8, 40.0));
     model = translate * scale;
     drawCube(cubeVAO, lightingShader, model, 0.933f, 0.510f, 0.933f, 32.0);
 
+    scale = glm::scale(identityMatrix, glm::vec3(25.0, 5.0, 4.0));
+    translate = glm::translate(identityMatrix, glm::vec3(20, -0.8, 30.0));
+    model = translate * scale;
+    cutcone.drawCutCone(lightingShader, model);
+    
+
     //washroom wall
-    scale = glm::scale(identityMatrix, glm::vec3(0.1, 5.0, 7.1));
-    translate = glm::translate(identityMatrix, glm::vec3(-3, -0.8, 17.0));
+    scale = glm::scale(identityMatrix, glm::vec3(0.1, 5.0,10.1));
+    translate = glm::translate(identityMatrix, glm::vec3(-23, -0.8, 37.0));
     model = translate * scale;
     drawCube(cubeVAO, lightingShader, model, 0.565f, 0.933f, 0.565f, 32.0);
     //mirror
     scale = glm::scale(identityMatrix, glm::vec3(0.1, 1.0, 1.0));
-    translate = glm::translate(identityMatrix, glm::vec3(-8.0, 2.5, 14.0));
+    translate = glm::translate(identityMatrix, glm::vec3(-28.0, 2.5, 34.0));
     model = translate * scale;
     cylinder.drawCylinder(lightingShader, model);
+    //basin
+    scale = glm::scale(identityMatrix, glm::vec3(1.2, 1.2, 1.2));
+    translate = glm::translate(identityMatrix, glm::vec3(-27.0, 1.6, 34.0));
+    model = translate * scale;
+    hemisphere.drawHemiSphere(lightingShader, model);
 
 
-    //round table
+
+
+    //round table 1
     glm::mat4 modelForCylinder = glm::mat4(1.0f);
-    modelForCylinder = glm::translate(modelForCylinder, glm::vec3(26.0f, 1.0f, 1.0f));
+    modelForCylinder = glm::translate(modelForCylinder, glm::vec3(46.0f, 1.2f, 1.0f));
     modelForCylinder = glm::rotate(modelForCylinder, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
     modelForCylinder = glm::scale(modelForCylinder, glm::vec3(0.05f, 2.0f, 2.0f));
     cylinder.drawCylinder(lightingShader, modelForCylinder);
 
+    //table stand 1
+    glm::mat4 stand1 = glm::mat4(1.0f);
+    stand1 = glm::translate(stand1, glm::vec3(46.0f, 0.2f, 1.0f));
+    stand1 = glm::rotate(stand1, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    stand1 = glm::scale(stand1, glm::vec3(1.0f, 0.2f,0.2f));
+    cylinder.drawCylinder(lightingShader, stand1);
+    //lower circle
+    glm::mat4 circle1 = glm::mat4(1.0f);
+    circle1 = glm::translate(circle1, glm::vec3(46.0f, -0.8f, 1.0f));
+    circle1 = glm::rotate(circle1, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    circle1 = glm::scale(circle1, glm::vec3(0.05f, 1.0f, 1.0f));
+    cylinder.drawCylinder(lightingShader, circle1);
+
+    //round table 2
+    glm::mat4 modelForCylinder2 = glm::mat4(1.0f);
+    modelForCylinder2 = glm::translate(modelForCylinder2, glm::vec3(46.0f, 1.2f, 12.0f));
+    modelForCylinder2 = glm::rotate(modelForCylinder2, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    modelForCylinder2 = glm::scale(modelForCylinder2, glm::vec3(0.05f, 2.0f, 2.0f));
+    cylinder.drawCylinder(lightingShader, modelForCylinder2);
+
+    //table stand 2
+    glm::mat4 stand2 = glm::mat4(1.0f);
+    stand2 = glm::translate(stand2, glm::vec3(46.0f, 0.2f, 12.0f));
+    stand2 = glm::rotate(stand2, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    stand2 = glm::scale(stand2, glm::vec3(1.0f, 0.2f, 0.2f));
+    cylinder.drawCylinder(lightingShader, stand2);
+    //lower circle
+    glm::mat4 circle2 = glm::mat4(1.0f);
+    circle2 = glm::translate(circle2, glm::vec3(46.0f, -0.8f, 12.0f));
+    circle2 = glm::rotate(circle2, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    circle2 = glm::scale(circle2, glm::vec3(0.05f, 1.0f, 1.0f));
+    cylinder.drawCylinder(lightingShader, circle2);
+
+    glm::mat4 modelForCylinder3 = glm::mat4(1.0f);
+    modelForCylinder3 = glm::translate(modelForCylinder3, glm::vec3(46.0f, 1.2f, 23.0f));
+    modelForCylinder3 = glm::rotate(modelForCylinder3, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    modelForCylinder3 = glm::scale(modelForCylinder3, glm::vec3(0.05f, 2.0f, 2.0f));
+    cylinder.drawCylinder(lightingShader, modelForCylinder3);
+
+    //table stand 3
+    glm::mat4 stand3 = glm::mat4(1.0f);
+    stand3 = glm::translate(stand3, glm::vec3(46.0f, 0.2f, 23.0f));
+    stand3 = glm::rotate(stand3, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    stand3 = glm::scale(stand3, glm::vec3(1.0f, 0.2f, 0.2f));
+    cylinder.drawCylinder(lightingShader, stand3);
+    //lower circle
+    glm::mat4 circle3 = glm::mat4(1.0f);
+    circle3 = glm::translate(circle3, glm::vec3(46.0f, -0.8f, 23.0f));
+    circle3 = glm::rotate(circle3, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    circle3 = glm::scale(circle3, glm::vec3(0.05f, 1.0f, 1.0f));
+    cylinder.drawCylinder(lightingShader, circle3);
+    //round table 4
+    glm::mat4 modelForCylinder4 = glm::mat4(1.0f);
+    modelForCylinder4 = glm::translate(modelForCylinder4, glm::vec3(-25.0f, 1.0f, 15.0f));
+    modelForCylinder4 = glm::rotate(modelForCylinder4, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    modelForCylinder4 = glm::scale(modelForCylinder4, glm::vec3(0.05f, 2.0f, 2.0f));
+    cylinder.drawCylinder(lightingShader, modelForCylinder4);
+    //round table 5
+    glm::mat4 modelForCylinder5 = glm::mat4(1.0f);
+    modelForCylinder5 = glm::translate(modelForCylinder5, glm::vec3(-32.0f, 1.0f, 4.0f));
+    modelForCylinder5 = glm::rotate(modelForCylinder5, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    modelForCylinder5 = glm::scale(modelForCylinder5, glm::vec3(0.05f, 2.0f, 2.0f));
+    cylinder.drawCylinder(lightingShader, modelForCylinder5);
+    //round table 6
+    glm::mat4 modelForCylinder6 = glm::mat4(1.0f);
+    modelForCylinder6 = glm::translate(modelForCylinder6, glm::vec3(-22.0f, 1.0f, 2.0f));
+    modelForCylinder6 = glm::rotate(modelForCylinder6, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    modelForCylinder6 = glm::scale(modelForCylinder6, glm::vec3(0.05f, 2.0f, 2.0f));
+    cylinder.drawCylinder(lightingShader, modelForCylinder6);
+    //book shelf
+    //base 1
+    scale = glm::scale(identityMatrix, glm::vec3(5.0, 0.2, 16.0));
+    translate = glm::translate(identityMatrix, glm::vec3(-40.0, -0.8, 14.0));
+    model = translate * scale;
+    drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
+    //base 2
+    scale = glm::scale(identityMatrix, glm::vec3(5.0, 0.2, 16.0));
+    translate = glm::translate(identityMatrix, glm::vec3(-40.0, 1.8, 14.0));
+    model = translate * scale;
+    //base 3
+    drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
+    scale = glm::scale(identityMatrix, glm::vec3(5.0, 0.2, 16.0));
+    translate = glm::translate(identityMatrix, glm::vec3(-40.0, 3.8, 14.0));
+    model = translate * scale;
+    drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
+    //base 4
+    scale = glm::scale(identityMatrix, glm::vec3(5.0, 0.2, 16.0));
+    translate = glm::translate(identityMatrix, glm::vec3(-40.0, 5.8, 14.0));
+    model = translate * scale;
+    drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
+
+    //side
+    scale = glm::scale(identityMatrix, glm::vec3(5.0, 6.6, 0.2));
+    translate = glm::translate(identityMatrix, glm::vec3(-40.0, -0.6, 14.0));
+    model = translate * scale;
+    drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
+    //side 2
+    scale = glm::scale(identityMatrix, glm::vec3(5.0, 6.7, 0.2));
+    translate = glm::translate(identityMatrix, glm::vec3(-40.0, -0.7, 29.8));
+    model = translate * scale;
+    drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
 
     //cross
     model = glm::mat4(1.0f);
@@ -729,16 +859,46 @@ void frontWall(unsigned int& cubeVAO, Shader& lightingShader, Cylinder& cylinder
     model = translate * scale;
     drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
 
-    //basin
-    /*scale = glm::scale(identityMatrix, glm::vec3(1.2, 1.2, 1.2));
-    translate = glm::translate(identityMatrix, glm::vec3(-7.0, 1.6, 14.0));
-    model = translate * scale;
-    hemisphere.drawHemiSphere(lightingShader, model);*/
+   
 
     //main table
     //table board
-    scale = glm::scale(identityMatrix, glm::vec3(3.0f, 0.2f, 2.0f));
-    translate = glm::translate(identityMatrix, glm::vec3(-2.0, 0.6, -2.2));
+    scale = glm::scale(identityMatrix, glm::vec3(8.0f, 1.4f, 3.5f));
+    translate = glm::translate(identityMatrix, glm::vec3(18.0, -0.8, 5.2));
+    model = translate * scale;
+    drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
+
+    //sofa 1
+    scale = glm::scale(identityMatrix, glm::vec3(4.0f, 1.2f, 4.0f));
+    translate = glm::translate(identityMatrix, glm::vec3(20.0, 0.2, 11.2));
+    model = translate * scale;
+    drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
+    //sofa back 1
+    scale = glm::scale(identityMatrix, glm::vec3(4.0f, 2.2f, 1.0f));
+    translate = glm::translate(identityMatrix, glm::vec3(20.0, 1.4, 14.2));
+    model = translate * scale;
+    drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
+    //sofa leg 1
+    scale = glm::scale(identityMatrix, glm::vec3(0.5f, 1.0f, 0.5f));
+    translate = glm::translate(identityMatrix, glm::vec3(20.0, -0.8, 11.2));
+    model = translate * scale;
+    drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
+
+    //sofa 2
+    scale = glm::scale(identityMatrix, glm::vec3(4.0f, 1.2f, 4.0f));
+    translate = glm::translate(identityMatrix, glm::vec3(30.0, 0.2, 5.0));
+    model = translate * scale;
+    drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
+
+    //sofa 3
+    scale = glm::scale(identityMatrix, glm::vec3(4.0f, 1.2f, 4.0f));
+    translate = glm::translate(identityMatrix, glm::vec3(20.0, 0.2, -0.3));
+    model = translate * scale;
+    drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
+
+    //sofa 4
+    scale = glm::scale(identityMatrix, glm::vec3(4.0f, 1.2f, 4.0f));
+    translate = glm::translate(identityMatrix, glm::vec3(11.0, 0.2, 5.0));
     model = translate * scale;
     drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
     //table leg 1
@@ -870,7 +1030,7 @@ void frontWall(unsigned int& cubeVAO, Shader& lightingShader, Cylinder& cylinder
     drawCube(cubeVAO, lightingShader, model, 0.0, 0.0, 0.0, 32.0);
 
 }
-void rightWall(unsigned int& cubeVAO, Shader& lightingShader, CutCone& cutcone)
+void rightWall(unsigned int& cubeVAO, Shader& lightingShader, CutCone& cutcone, Cylinder& cylinder)
 {
     lightingShader.use();
     //base
@@ -883,17 +1043,17 @@ void rightWall(unsigned int& cubeVAO, Shader& lightingShader, CutCone& cutcone)
 
     //commode
     scale = glm::scale(identityMatrix, glm::vec3(1.0, 1.0, 1.5));
-    translate = glm::translate(identityMatrix, glm::vec3(-7, -0.8, 18.5));
+    translate = glm::translate(identityMatrix, glm::vec3(-30, -0.8, 28.5));
     model = translate * scale;
     cutcone.drawCutCone(lightingShader, model);
     //commode
     scale = glm::scale(identityMatrix, glm::vec3(1.0, 0.1, 1.5));
-    translate = glm::translate(identityMatrix, glm::vec3(-7, -0.1, 18.5));
+    translate = glm::translate(identityMatrix, glm::vec3(-30, -0.1, 28.5));
     model = translate * scale;
     cutcone.drawCutCone(lightingShader, model);
 
     scale = glm::scale(identityMatrix, glm::vec3(1.7, 1.5, 0.7));
-    translate = glm::translate(identityMatrix, glm::vec3(-7.85, -0.1, 19.0));
+    translate = glm::translate(identityMatrix, glm::vec3(-30.85, -0.1, 29.0));
     model = translate * scale;
     drawCube(cubeVAO, lightingShader, model, 0.122, 0.361, 0.357, 32.0);
 
@@ -923,12 +1083,59 @@ void rightWall(unsigned int& cubeVAO, Shader& lightingShader, CutCone& cutcone)
     model = translate * scale;
     drawCube(cubeVAO, lightingShader, model, 0.122, 0.361, 0.357, 32.0);
 
-    //lower rack
-    scale = glm::scale(identityMatrix, glm::vec3(1.5, 1.5, 16.0));
-    translate = glm::translate(identityMatrix, glm::vec3(25.2, -0.8, 25.5));
+    //long table
+    scale = glm::scale(identityMatrix, glm::vec3(5.0, 0.5, 28.0));
+    translate = glm::translate(identityMatrix, glm::vec3(46.0,2.0, 35.0));
     model = translate * scale;
     drawCube(cubeVAO, lightingShader, model, 0.788f, 0.604f, 0.145f, 32.0);
 
+
+    //cross
+    model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(50.0f, -0.9f, 35.0f));
+    model = glm::rotate(model, glm::radians(48.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    model = glm::scale(model, glm::vec3(0.2f, 4.8f, 0.2f));
+    drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
+
+    model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(46.0f, -1.0f, 35.0f));
+    model = glm::rotate(model, glm::radians(-48.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    model = glm::scale(model, glm::vec3(0.2f,5.0f, 0.2f));
+    drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
+
+    //long table chairs
+    glm::mat4 modelForCylinder = glm::mat4(1.0f);
+    modelForCylinder = glm::translate(modelForCylinder, glm::vec3(42.0f, 1.6f, 37.0f));
+    modelForCylinder = glm::rotate(modelForCylinder, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    modelForCylinder = glm::scale(modelForCylinder, glm::vec3(0.05f, 1.4f, 1.4f));
+    cylinder.drawCylinder(lightingShader, modelForCylinder);
+    //legs
+    scale = glm::scale(identityMatrix, glm::vec3(0.1, 3.0, 0.1));
+    translate = glm::translate(identityMatrix, glm::vec3(40.0, -0.8, 35.0));
+    model = translate * scale;
+    drawCube(cubeVAO, lightingShader, model, 0.788f, 0.604f, 0.145f, 32.0);
+
+
+    //chair 2
+    modelForCylinder = glm::mat4(1.0f);
+    modelForCylinder = glm::translate(modelForCylinder, glm::vec3(42.0f, 1.6f, 44.0f));
+    modelForCylinder = glm::rotate(modelForCylinder, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    modelForCylinder = glm::scale(modelForCylinder, glm::vec3(0.05f, 1.4f, 1.4f));
+    cylinder.drawCylinder(lightingShader, modelForCylinder);
+    //chair 3
+     modelForCylinder = glm::mat4(1.0f);
+    modelForCylinder = glm::translate(modelForCylinder, glm::vec3(42.0f, 1.6f, 51.0f));
+    modelForCylinder = glm::rotate(modelForCylinder, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    modelForCylinder = glm::scale(modelForCylinder, glm::vec3(0.05f, 1.4f, 1.4f));
+    cylinder.drawCylinder(lightingShader, modelForCylinder);
+
+
+    //chair 3
+    modelForCylinder = glm::mat4(1.0f);
+    modelForCylinder = glm::translate(modelForCylinder, glm::vec3(42.0f, 1.6f, 57.0f));
+    modelForCylinder = glm::rotate(modelForCylinder, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    modelForCylinder = glm::scale(modelForCylinder, glm::vec3(0.05f, 1.4f, 1.4f));
+    cylinder.drawCylinder(lightingShader, modelForCylinder);
 
 }
 

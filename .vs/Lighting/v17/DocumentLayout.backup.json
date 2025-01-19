@@ -11,20 +11,12 @@
       "RelativeMoniker": "D:0:0:{FC920F35-5119-4F2D-8BF5-F04F11F55C0D}|Lighting.vcxproj|solutionrelative:camera.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FC920F35-5119-4F2D-8BF5-F04F11F55C0D}|Lighting.vcxproj|G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\stb_image.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{FC920F35-5119-4F2D-8BF5-F04F11F55C0D}|Lighting.vcxproj|solutionrelative:stb_image.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{FC920F35-5119-4F2D-8BF5-F04F11F55C0D}|Lighting.vcxproj|G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\basic_camera.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{FC920F35-5119-4F2D-8BF5-F04F11F55C0D}|Lighting.vcxproj|solutionrelative:basic_camera.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{FC920F35-5119-4F2D-8BF5-F04F11F55C0D}|Lighting.vcxproj|G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\fragmentShaderForPhongShading.fs||{3B902123-F8A7-4915-9F01-361F908088D0}",
       "RelativeMoniker": "D:0:0:{FC920F35-5119-4F2D-8BF5-F04F11F55C0D}|Lighting.vcxproj|solutionrelative:fragmentShaderForPhongShading.fs||{3B902123-F8A7-4915-9F01-361F908088D0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{FC920F35-5119-4F2D-8BF5-F04F11F55C0D}|Lighting.vcxproj|G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\fragmentShaderForPhongShadingWithTexture.fs||{3B902123-F8A7-4915-9F01-361F908088D0}",
-      "RelativeMoniker": "D:0:0:{FC920F35-5119-4F2D-8BF5-F04F11F55C0D}|Lighting.vcxproj|solutionrelative:fragmentShaderForPhongShadingWithTexture.fs||{3B902123-F8A7-4915-9F01-361F908088D0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{FC920F35-5119-4F2D-8BF5-F04F11F55C0D}|Lighting.vcxproj|G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\vertexShaderForPhongShading.vs||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{FC920F35-5119-4F2D-8BF5-F04F11F55C0D}|Lighting.vcxproj|solutionrelative:vertexShaderForPhongShading.vs||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{FC920F35-5119-4F2D-8BF5-F04F11F55C0D}|Lighting.vcxproj|G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\sphere.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -33,10 +25,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{FC920F35-5119-4F2D-8BF5-F04F11F55C0D}|Lighting.vcxproj|G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\cube.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{FC920F35-5119-4F2D-8BF5-F04F11F55C0D}|Lighting.vcxproj|solutionrelative:cube.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{FC920F35-5119-4F2D-8BF5-F04F11F55C0D}|Lighting.vcxproj|G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\stb_image.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{FC920F35-5119-4F2D-8BF5-F04F11F55C0D}|Lighting.vcxproj|solutionrelative:stb_image.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{FC920F35-5119-4F2D-8BF5-F04F11F55C0D}|Lighting.vcxproj|G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\vertexShaderForPhongShadingWithTexture.vs||{8B382828-6202-11D1-8870-0000F87579D2}",
@@ -50,8 +38,21 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "fragmentShaderForPhongShading.fs",
+              "DocumentMoniker": "G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\fragmentShaderForPhongShading.fs",
+              "RelativeDocumentMoniker": "fragmentShaderForPhongShading.fs",
+              "ToolTip": "G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\fragmentShaderForPhongShading.fs",
+              "RelativeToolTip": "fragmentShaderForPhongShading.fs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-01-13T04:37:24.256Z",
+              "IsPinned": true
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -60,50 +61,26 @@
               "RelativeDocumentMoniker": "main.cpp",
               "ToolTip": "G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\main.cpp*",
               "RelativeToolTip": "main.cpp*",
-              "ViewState": "AgIAAMECAAAAAAAAAADwv9ACAAAzAAAAAAAAAA==",
+              "ViewState": "AgIAADwDAAAAAAAAAAAQwEYDAABKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-12-11T20:27:48.265Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "vertexShaderForPhongShading.vs",
-              "DocumentMoniker": "G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\vertexShaderForPhongShading.vs",
-              "RelativeDocumentMoniker": "vertexShaderForPhongShading.vs",
-              "ToolTip": "G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\vertexShaderForPhongShading.vs",
-              "RelativeToolTip": "vertexShaderForPhongShading.vs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAA0AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-01-13T05:50:05.022Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "stb_image.h",
-              "DocumentMoniker": "G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\stb_image.h",
-              "RelativeDocumentMoniker": "stb_image.h",
-              "ToolTip": "G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\stb_image.h",
-              "RelativeToolTip": "stb_image.h",
-              "ViewState": "AgIAAE8XAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-01-05T13:56:52.49Z"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "stb_image.cpp",
-              "DocumentMoniker": "G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\stb_image.cpp",
-              "RelativeDocumentMoniker": "stb_image.cpp",
-              "ToolTip": "G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\stb_image.cpp",
-              "RelativeToolTip": "stb_image.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAWAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-01-05T13:56:41.891Z"
+              "Title": "basic_camera.h",
+              "DocumentMoniker": "G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\basic_camera.h",
+              "RelativeDocumentMoniker": "basic_camera.h",
+              "ToolTip": "G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\basic_camera.h",
+              "RelativeToolTip": "basic_camera.h",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-01-17T05:07:32.414Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 4,
               "Title": "sphere.h",
               "DocumentMoniker": "G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\sphere.h",
               "RelativeDocumentMoniker": "sphere.h",
@@ -115,44 +92,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "fragmentShaderForPhongShadingWithTexture.fs",
-              "DocumentMoniker": "G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\fragmentShaderForPhongShadingWithTexture.fs",
-              "RelativeDocumentMoniker": "fragmentShaderForPhongShadingWithTexture.fs",
-              "ToolTip": "G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\fragmentShaderForPhongShadingWithTexture.fs",
-              "RelativeToolTip": "fragmentShaderForPhongShadingWithTexture.fs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAADgAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2024-12-13T15:31:28.267Z"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 1,
               "Title": "camera.h",
               "DocumentMoniker": "G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\camera.h",
               "RelativeDocumentMoniker": "camera.h",
               "ToolTip": "G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\camera.h",
               "RelativeToolTip": "camera.h",
-              "ViewState": "AgIAACEAAAAAAAAAAAAAACMAAAAXAAAAAAAAAA==",
+              "ViewState": "AgIAAEIAAAAAAAAAAAAAACMAAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2024-12-13T15:05:20.931Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "fragmentShaderForPhongShading.fs",
-              "DocumentMoniker": "G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\fragmentShaderForPhongShading.fs",
-              "RelativeDocumentMoniker": "fragmentShaderForPhongShading.fs",
-              "ToolTip": "G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\fragmentShaderForPhongShading.fs",
-              "RelativeToolTip": "fragmentShaderForPhongShading.fs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAmAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-01-13T04:37:24.256Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 5,
               "Title": "cube.h",
               "DocumentMoniker": "G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\cube.h",
               "RelativeDocumentMoniker": "cube.h",
@@ -168,7 +121,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 6,
               "Title": "vertexShaderForPhongShadingWithTexture.vs",
               "DocumentMoniker": "G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\vertexShaderForPhongShadingWithTexture.vs",
               "RelativeDocumentMoniker": "vertexShaderForPhongShadingWithTexture.vs",
