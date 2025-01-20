@@ -9,6 +9,7 @@
 #include "camera.h"
 #include "basic_camera.h"
 #include "pointLight.h"
+#include "SpotLight.h"
 #include "sphere.h"
 #include "cube.h" //e
 #include "stb_image.h" //e
@@ -28,9 +29,9 @@ void bed(unsigned int& cubeVAO, Shader& lightingShader, glm::mat4 alTogether);
 void floor(unsigned int& cubeVAO, Shader& lightingShader);
 void frontWall(unsigned int& cubeVAO, Shader& lightingShader, Cylinder& cylinder, HemiSphere& hemisphere, Cone& cone, CutCone& con);
 void rightWall(unsigned int& cubeVAO, Shader& lightingShader, CutCone& cone, Cylinder& cylinder);
-void ambienton_off(Shader& lightingShader);
-void diffuse_on_off(Shader& lightingShader);
-void specular_on_off(Shader& lightingShader);
+//void ambienton_off(Shader& lightingShader);
+//void diffuse_on_off(Shader& lightingShader);
+//void specular_on_off(Shader& lightingShader);
 unsigned int loadTexture(char const* path, GLenum textureWrappingModeS, GLenum textureWrappingModeT, GLenum textureFilteringModeMin, GLenum textureFilteringModeMax);
 
 
@@ -71,10 +72,10 @@ float translate_Z = 0.0;
 float scale_X = 1.0;
 float scale_Y = 1.0;
 float scale_Z = 1.0;
-
+float moveZ = 0.0;
 // camera
 //Camera camera(glm::vec3(0.0f, 1.1f, -5.2f));
-Camera camera(glm::vec3(-11.0f, 14.1f, 12.2f));
+Camera camera(glm::vec3(31.0f, 14.1f, -12.2f));
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -88,8 +89,10 @@ BasicCamera basic_camera(eyeX, eyeY, eyeZ, lookAtX, lookAtY, lookAtZ, V);
 // positions of the point lights
 glm::vec3 pointLightPositions[] = {
     glm::vec3(11.50f,  2.50f,  -0.5f),
-    glm::vec3(4.5f,  2.50f,  8.5f)
-    //glm::vec3(-1.5f,  1.5f,  0.0f),
+    glm::vec3(4.5f,  2.50f,  8.5f),
+    glm::vec3(46.0f, 6.0f, 0.7f),
+    glm::vec3(46.0f, 6.0f, 11.7f),
+    glm::vec3(46.0f, 6.0f, 22.7f)
     //glm::vec3(-1.5f,  -1.5f,  0.0f)
 };
 PointLight pointlight1(
@@ -114,41 +117,72 @@ PointLight pointlight2(
     0.032f, //k_q
     2       // light number
 );
-//PointLight pointlight3(
-//
-//    pointLightPositions[2].x, pointLightPositions[2].y, pointLightPositions[2].z,  // position
-//    0.05f, 0.05f, 0.05f,     // ambient
-//    0.8f, 0.8f, 0.8f,     // diffuse
-//    1.0f, 1.0f, 1.0f,        // specular
-//    1.0f,   //k_c
-//    0.09f,  //k_l
-//    0.032f, //k_q
-//    3       // light number
-//);
-//PointLight pointlight4(
-//
-//    pointLightPositions[3].x, pointLightPositions[3].y, pointLightPositions[3].z,  // position
-//    0.05f, 0.05f, 0.05f,     // ambient
-//    0.8f, 0.8f, 0.8f,     // diffuse
-//    1.0f, 1.0f, 1.0f,        // specular
-//    1.0f,   //k_c
-//    0.09f,  //k_l
-//    0.032f, //k_q
-//    4       // light number
-//);
+PointLight pointlight3(
 
+    pointLightPositions[2].x, pointLightPositions[2].y, pointLightPositions[2].z,  // position
+    0.05f, 0.05f, 0.05f,     // ambient
+    0.8f, 0.8f, 0.8f,     // diffuse
+    1.0f, 1.0f, 1.0f,        // specular
+    1.0f,   //k_c
+    0.09f,  //k_l
+   0.032f, //k_q
+   3       // light number
+);
+PointLight pointlight4(
+
+    pointLightPositions[3].x, pointLightPositions[3].y, pointLightPositions[3].z,  // position
+    0.05f, 0.05f, 0.05f,     // ambient
+    0.8f, 0.8f, 0.8f,     // diffuse
+    1.0f, 1.0f, 1.0f,        // specular
+    1.0f,   //k_c
+    0.09f,  //k_l
+    0.032f, //k_q
+    4       // light number
+);
+PointLight pointlight5(
+
+    pointLightPositions[4].x, pointLightPositions[4].y, pointLightPositions[4].z,  // position
+    0.05f, 0.05f, 0.05f,     // ambient
+    0.8f, 0.8f, 0.8f,     // diffuse
+    1.0f, 1.0f, 1.0f,        // specular
+    1.0f,   //k_c
+    0.09f,  //k_l
+    0.032f, //k_q
+    5       // light number
+);
+
+
+
+float spotLightXpos = -1.0f, spotLightYpos = 3.7;
+glm::vec3 spotPositions[] = {
+    glm::vec3(-1.0f,3.7, 1.0f),
+};
+SpotLight spotlight1(
+    spotPositions[0].x, spotPositions[0].y, spotPositions[0].z,  // position
+    0.2f, 0.2f, 0.2f,     // ambient
+    0.8f, 0.8f, 0.8f,      // diffuse
+    1.0f, 1.0f, 1.0f,        // specular
+    1.0f,   //k_c
+    0.09f,  //k_l
+    0.032f, //k_q
+    1,       // light number
+    glm::cos(glm::radians(20.5f)),
+    glm::cos(glm::radians(25.0f)),
+    0, -1, 0
+);
 
 // light settings
 bool pointLightOn = true;
-bool directionalLightOn = true;
+bool directionLightOn = true;
 bool SpotLightOn = true;
-bool AmbientON = true;
-bool DiffusionON = true;
-bool SpecularON = true;
-bool ambientToggle = true;
-bool diffuseToggle = true;
-bool specularToggle = true;
+//bool AmbientON = true;
+//bool DiffusionON = true;
+//bool SpecularON = true;
+//bool ambientToggle = true;
+//bool diffuseToggle = true;
+//bool specularToggle = true;
 
+bool onOffToggle = true;
 
 // timing
 float deltaTime = 0.0f;    // time between current frame and last frame
@@ -310,16 +344,40 @@ int main()
     glEnableVertexAttribArray(0);
 
     string laughEmoPath = "football.jpg";
-    string coffeePath = "cf.png";
-    //string patrn = "vector.jpg";
-    unsigned int coffepic = loadTexture(coffeePath.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
-
     unsigned int laughEmoji = loadTexture(laughEmoPath.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    //string coffeePath = "cf.png";
+    //string patrn = "vector.jpg";
+
+    string coffeePath = "cf.png";
+    unsigned int coffepic = loadTexture(coffeePath.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
     Cube cube = Cube(coffepic, coffepic, 32.0f, 0.0f, 0.0f, 1.0f, 1.0f);
+
+    string football = "football.jpg";
+    unsigned int football_tex = loadTexture(football.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    Cube football_cube = Cube(football_tex, football_tex, 32.0f, 0.0f, 0.0f, 1.0f, 1.0f);
+    
+
+    string books = "booktex.jpg";
+    unsigned int books_tex = loadTexture(books.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    Cube book_cube = Cube(books_tex, books_tex, 32.0f, 0.0f, 0.0f, 1.0f, 1.0f);
+    
+    string floors = "floortex5.jpg";
+    unsigned int floor_tex = loadTexture(floors.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    Cube floor_cube = Cube(floor_tex, floor_tex, 32.0f, 0.0f, 0.0f, 1.0f, 1.0f);
+
+
+    string lamp = "pattern.jpg";
+    unsigned int lamp_tex = loadTexture(lamp.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    
+   
+   // Cube cube = Cube(coffepic, coffepic, 32.0f, 0.0f, 0.0f, 1.0f, 1.0f);
 
     SphereTex spheretex = SphereTex();
     CylinderTex cylindertex = CylinderTex();
     ConeTex conetex = ConeTex();
+    DiscTex disctex = DiscTex(2);
+    
+    DiscTex disctex_2 = DiscTex(1);
 
     Sphere sphere = Sphere();
     Cylinder cylinder = Cylinder();
@@ -373,15 +431,28 @@ int main()
         // point light 2
         pointlight2.setUpPointLight(lightingShader);
         // point light 3
-        //pointlight3.setUpPointLight(lightingShader);
+        pointlight3.setUpPointLight(lightingShader);
         // point light 4
-        //pointlight4.setUpPointLight(lightingShader);
-
+        pointlight4.setUpPointLight(lightingShader);
+        // point light 5
+        pointlight5.setUpPointLight(lightingShader);
 
         // activate shader
-        lightingShader.use();
+        //lightingShader.use();
 
-        lightingShader.setVec3("directionalLight.direction", 0.5f, -3.0f, -3.0f);
+
+        lightingShader.setVec3("directionalLight.directiaon", 0.5f, -3.0f, -3.0f);
+        lightingShader.setVec3("directionalLight.ambient", .5f, .5f, .5f);
+        lightingShader.setVec3("directionalLight.diffuse", .8f, .8f, .8f);
+        lightingShader.setVec3("directionalLight.specular", 1.0f, 1.0f, 1.0f);
+
+
+        lightingShader.setBool("directionLightOn", directionLightOn);
+
+        spotlight1.setUpspotLight(lightingShader);
+
+        //lightingShader.use();
+        /*lightingShader.setVec3("directionalLight.direction", 0.5f, -3.0f, -3.0f);
         if (AmbientON) {
             lightingShader.setVec3("directionalLight.ambient", 0.2f, 0.2f, 0.2f);
             lightingShader.setVec3("spotLight.ambient", 0.2f, 0.2f, 0.2f);
@@ -394,9 +465,9 @@ int main()
 
             lightingShader.setVec3("directionalLight.specular", 1.0f, 1.0f, 1.0f);
             lightingShader.setVec3("spotLight.specular", 1.0f, 1.0f, 1.0f);
-        }
+        }*/
 
-        lightingShader.setBool("directionalLightON", directionalLightOn);
+        /*lightingShader.setBool("directionalLightON", directionalLightOn);
         lightingShader.setBool("SpotLightON", SpotLightOn);
 
         lightingShader.setVec3("spotLight.direction", 0.0f, -1.0f, 0.0f);
@@ -408,7 +479,7 @@ int main()
         lightingShader.setFloat("spotLight.k_l", 0.09f);
         lightingShader.setFloat("spotLight.k_q", 0.032f);
         lightingShader.setFloat("spotLight.cutOff", glm::cos(glm::radians(35.5f)));
-        lightingShader.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(40.5f)));
+        lightingShader.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(40.5f)));*/
 
         // pass projection matrix to shader (note that in this case it could change every frame)
        // glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
@@ -418,7 +489,7 @@ int main()
             glm::radians(camera.Zoom),         // fov: field of view in radians
             (float)SCR_WIDTH / (float)SCR_HEIGHT, // aspect: aspect ratio
             0.1f,                              // near: near clipping plane
-            100.0f                             // far: far clipping plane
+            200.0f                             // far: far clipping plane
         );
 
         lightingShader.setMat4("projection", projection);
@@ -470,7 +541,7 @@ int main()
 
         bed(cubeVAO, lightingShader, model);
         //draw floor
-        floor(cubeVAO, lightingShader);
+        //floor(cubeVAO, lightingShader);
         //axis(cubeVAO, lightingShader);
         frontWall(cubeVAO, lightingShader, cylinder, hemisphere, cone, cutcone);
         rightWall(cubeVAO, lightingShader, cutcone, cylinder);
@@ -498,18 +569,18 @@ int main()
             //glDrawArrays(GL_TRIANGLES, 0, 36);
         }
 
-        if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
-        {
-            ambienton_off(lightingShader);
-        }
-        if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS)
-        {
-            diffuse_on_off(lightingShader);
-        }
-        if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS)
-        {
-            specular_on_off(lightingShader);
-        }
+        //if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
+        //{
+        //    ambienton_off(lightingShader);
+        //}
+        //if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS)
+        //{
+        //    diffuse_on_off(lightingShader);
+        //}
+        //if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS)
+        //{
+        //    specular_on_off(lightingShader);
+        //}
 
         // be sure to activate shader when setting uniforms/drawing objects
         lightingShaderWithTexture.use();
@@ -521,13 +592,42 @@ int main()
         pointlight1.setUpPointLight(lightingShaderWithTexture);
         // point light 2
         pointlight2.setUpPointLight(lightingShaderWithTexture);
+        // point light 3
+        pointlight3.setUpPointLight(lightingShaderWithTexture);
+        // point light 4
+        pointlight4.setUpPointLight(lightingShaderWithTexture);
+        // point light 5
+        pointlight5.setUpPointLight(lightingShaderWithTexture);
+
+        lightingShaderWithTexture.setVec3("directionalLight.directiaon", 0.5f, -3.0f, -3.0f);
+        lightingShaderWithTexture.setVec3("directionalLight.ambient", 0.2f, 0.2f, 0.2f);
+        lightingShaderWithTexture.setVec3("directionalLight.diffuse", .8f, .8f, .8f);
+        lightingShaderWithTexture.setVec3("directionalLight.specular", 1.0f, 1.0f, 1.0f);
+
+
+        lightingShaderWithTexture.setBool("directionLightOn", directionLightOn);
+
+        spotlight1.setUpspotLight(lightingShaderWithTexture);
+        //lightingShaderWithTexture.use();
 
         glm::mat4 modelMatrixForContainer = glm::mat4(1.0f);
 
         modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(7.0f, 1.3f, 8.4f));
         modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(2.7f, 2.4f, 0.2f));
-        cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+        football_cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
 
+        //floor
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-46.0, -1.0, -5.0));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(100.0, 0.8, 70.0));
+        floor_cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+
+        //books 
+        modelMatrixForContainer = glm::mat4(1.0f);
+
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-35.0f, -0.6f, 14.0f));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.2f, 7.6f, 16.0f));
+        book_cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
         //sphere with tex
         modelMatrixForContainer = glm::mat4(1.0f);
         modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(11.0f, 1.25f, 2.0f));
@@ -536,7 +636,27 @@ int main()
         spheretex.drawSphere(lightingShaderWithTexture, laughEmoji, modelMatrixForContainer);
         //cylindertex.drawCylinder(lightingShaderWithTexture, laughEmoji, modelMatrixForContainer);
         //conetex.drawCone(lightingShaderWithTexture, laughEmoji, modelMatrixForContainer);
+        
+        //lamp
+        int lampdraw = 3;
+        float dist = 0.7;
+        while (lampdraw--)
+        {
+            modelMatrixForContainer = glm::mat4(1.0f);
+            modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(46.0f, 6.0f, dist));
+            modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.6f, 0.6f, 0.6f));
+            conetex.drawCone(lightingShaderWithTexture, lamp_tex, modelMatrixForContainer);
+            dist += 11.0;
+        }
+        /*scale = glm::scale(identityMatrix, glm::vec3(0.6, 0.05, 0.05));
+        translate = glm::translate(identityMatrix, glm::vec3(11.4f, 2.9f, -0.52f));*/
 
+
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(11.0f, 1.25f, 2.0f));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(2.5f, 2.5f, 2.5f));
+        //cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+        disctex.drawCylinder(lightingShaderWithTexture, laughEmoji, modelMatrixForContainer);
 
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
@@ -679,32 +799,38 @@ void frontWall(unsigned int& cubeVAO, Shader& lightingShader, Cylinder& cylinder
     glm::mat4 scale = glm::mat4(1.0f);
     glm::mat4 rotation = glm::mat4(1.0f);
     glm::mat4 model = translate * scale;
-    //window wall
-    scale = glm::scale(identityMatrix, glm::vec3(0.1, 8.0, 70.0));
+    //window wall(round table)
+    scale = glm::scale(identityMatrix, glm::vec3(0.1, 10.0, 70.0));
     translate = glm::translate(identityMatrix, glm::vec3(50.9, -0.8, -5.0));
     model = translate * scale;
     drawCube(cubeVAO, lightingShader, model, 0.565f, 0.933f, 0.565f, 32.0);
     //back wall
-    scale = glm::scale(identityMatrix, glm::vec3(62.0, 8.0, 0.1));
+    scale = glm::scale(identityMatrix, glm::vec3(62.0, 10.0, 0.1));
     translate = glm::translate(identityMatrix, glm::vec3(-10.0, -0.8, 65.0));
     model = translate * scale;
     drawCube(cubeVAO, lightingShader, model, 0.565f, 0.933f, 0.565f, 32.0);
-
+    //right wall,behind book shelf
+    scale = glm::scale(identityMatrix, glm::vec3(0.1, 10.0, 70.0));
+    translate = glm::translate(identityMatrix, glm::vec3(-40.0, -0.8, -10.0));
+    model = translate * scale;
+    drawCube(cubeVAO, lightingShader, model, 0.565f, 0.933f, 0.565f, 32.0);
     //cash counter wall
-    scale = glm::scale(identityMatrix, glm::vec3(30.0, 8.0, 0.1));
+    scale = glm::scale(identityMatrix, glm::vec3(30.0, 10.0, 0.1));
     translate = glm::translate(identityMatrix, glm::vec3(1.0, -0.8, 40.0));
     model = translate * scale;
     drawCube(cubeVAO, lightingShader, model, 0.933f, 0.510f, 0.933f, 32.0);
-    //right side wall
-    scale = glm::scale(identityMatrix, glm::vec3(0.1, 8.0, 15.0));
+    //right side wall(counter
+    scale = glm::scale(identityMatrix, glm::vec3(0.1, 10.0, 15.0));
     translate = glm::translate(identityMatrix, glm::vec3(1.0, -0.8, 40.0));
     model = translate * scale;
     drawCube(cubeVAO, lightingShader, model, 0.933f, 0.510f, 0.933f, 32.0);
-    //left side wall
-    scale = glm::scale(identityMatrix, glm::vec3(0.1, 8.0, 15.0));
+    //left side wall(counter
+    scale = glm::scale(identityMatrix, glm::vec3(0.1, 10.0, 15.0));
     translate = glm::translate(identityMatrix, glm::vec3(31.0, -0.8, 40.0));
     model = translate * scale;
     drawCube(cubeVAO, lightingShader, model, 0.933f, 0.510f, 0.933f, 32.0);
+
+
 
     scale = glm::scale(identityMatrix, glm::vec3(25.0, 5.0, 4.0));
     translate = glm::translate(identityMatrix, glm::vec3(20, -0.8, 30.0));
@@ -874,9 +1000,11 @@ void frontWall(unsigned int& cubeVAO, Shader& lightingShader, Cylinder& cylinder
     model = translate * scale;
     drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
     //sofa back 1
+    //rotation = glm::rotate(model, glm::radians(10.0f), glm::vec3(0.0f, 0.0f, 1.0f));
     scale = glm::scale(identityMatrix, glm::vec3(4.0f, 2.2f, 1.0f));
     translate = glm::translate(identityMatrix, glm::vec3(20.0, 1.4, 14.2));
-    model = translate * scale;
+    //rotation = glm::rotate(identityMatrix, glm::radians(10.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    model = translate * scale*rotation;
     drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
     //sofa leg 1
     scale = glm::scale(identityMatrix, glm::vec3(0.5f, 1.0f, 0.5f));
@@ -889,16 +1017,31 @@ void frontWall(unsigned int& cubeVAO, Shader& lightingShader, Cylinder& cylinder
     translate = glm::translate(identityMatrix, glm::vec3(30.0, 0.2, 5.0));
     model = translate * scale;
     drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
+    //sofa back 2
+    scale = glm::scale(identityMatrix, glm::vec3(1.0f, 2.2f, 4.0f));
+    translate = glm::translate(identityMatrix, glm::vec3(33.0, 1.4, 5.0));
+    model = translate * scale;
+    drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
 
     //sofa 3
     scale = glm::scale(identityMatrix, glm::vec3(4.0f, 1.2f, 4.0f));
     translate = glm::translate(identityMatrix, glm::vec3(20.0, 0.2, -0.3));
     model = translate * scale;
     drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
+    //back
+    scale = glm::scale(identityMatrix, glm::vec3(4.0f, 2.2f, 1.0f));
+    translate = glm::translate(identityMatrix, glm::vec3(20.0, 1.4, -0.2));
+    model = translate * scale;
+    drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
 
     //sofa 4
     scale = glm::scale(identityMatrix, glm::vec3(4.0f, 1.2f, 4.0f));
     translate = glm::translate(identityMatrix, glm::vec3(11.0, 0.2, 5.0));
+    model = translate * scale;
+    drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
+    //back
+    scale = glm::scale(identityMatrix, glm::vec3(1.0f, 2.2f, 4.0f));
+    translate = glm::translate(identityMatrix, glm::vec3(11.0, 1.4, 5.0));
     model = translate * scale;
     drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
     //table leg 1
@@ -1051,7 +1194,7 @@ void rightWall(unsigned int& cubeVAO, Shader& lightingShader, CutCone& cutcone, 
     translate = glm::translate(identityMatrix, glm::vec3(-30, -0.1, 28.5));
     model = translate * scale;
     cutcone.drawCutCone(lightingShader, model);
-
+    //commode flush tank
     scale = glm::scale(identityMatrix, glm::vec3(1.7, 1.5, 0.7));
     translate = glm::translate(identityMatrix, glm::vec3(-30.85, -0.1, 29.0));
     model = translate * scale;
@@ -1083,25 +1226,30 @@ void rightWall(unsigned int& cubeVAO, Shader& lightingShader, CutCone& cutcone, 
     model = translate * scale;
     drawCube(cubeVAO, lightingShader, model, 0.122, 0.361, 0.357, 32.0);
 
-    //long table
+    //long table-study
     scale = glm::scale(identityMatrix, glm::vec3(5.0, 0.5, 28.0));
     translate = glm::translate(identityMatrix, glm::vec3(46.0,2.0, 35.0));
     model = translate * scale;
     drawCube(cubeVAO, lightingShader, model, 0.788f, 0.604f, 0.145f, 32.0);
+    //long table cross
+    float bab = 37.0f;
+    int gg = 4;
+    while (gg--)
+    {
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(50.0f, -0.9f, bab));
+        model = glm::rotate(model, glm::radians(48.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+        model = glm::scale(model, glm::vec3(0.2f, 4.8f, 0.2f));
+        drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
 
-
-    //cross
-    model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(50.0f, -0.9f, 35.0f));
-    model = glm::rotate(model, glm::radians(48.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-    model = glm::scale(model, glm::vec3(0.2f, 4.8f, 0.2f));
-    drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
-
-    model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(46.0f, -1.0f, 35.0f));
-    model = glm::rotate(model, glm::radians(-48.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-    model = glm::scale(model, glm::vec3(0.2f,5.0f, 0.2f));
-    drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(46.0f, -1.0f, bab));
+        model = glm::rotate(model, glm::radians(-48.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+        model = glm::scale(model, glm::vec3(0.2f, 5.0f, 0.2f));
+        drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
+        bab += 8.0f;
+    }
+    
 
     //long table chairs
     glm::mat4 modelForCylinder = glm::mat4(1.0f);
@@ -1362,78 +1510,78 @@ void processInput(GLFWwindow* window)
     //}
 
 }
-void ambienton_off(Shader& lightingShader)
-{
-    double currentTime = glfwGetTime();
-    if (currentTime - lastKeyPressTime < keyPressDelay) return;
-    lightingShader.use();
-    if (AmbientON)
-    {
-        pointlight1.turnAmbientOff();
-        pointlight2.turnAmbientOff();
-        lightingShader.setVec3("directionalLight.ambient", 0.0f, 0.0f, 0.0f);
-        lightingShader.setVec3("spotLight.ambient", 0.0f, 0.0f, 0.0f);
-        AmbientON = !AmbientON;
-        lastKeyPressTime = currentTime;
-    }
-    else
-    {
-        pointlight1.turnAmbientOn();
-        pointlight2.turnAmbientOn();
-        lightingShader.setVec3("directionalLight.ambient", 0.2f, 0.2f, 0.2f);
-        lightingShader.setVec3("spotLight.ambient", 0.2f, 0.2f, 0.2f);
-        AmbientON = !AmbientON;
-        lastKeyPressTime = currentTime;
-    }
-}
-void diffuse_on_off(Shader& lightingShader)
-{
-    double currentTime = glfwGetTime();
-    if (currentTime - lastKeyPressTime < keyPressDelay) return;
-    lightingShader.use();
-    if (DiffusionON)
-    {
-        pointlight1.turnDiffuseOff();
-        pointlight2.turnDiffuseOff();
-        lightingShader.setVec3("directionalLight.diffuse", 0.0f, 0.0f, 0.0f);
-        lightingShader.setVec3("spotLight.diffuse", 0.0f, 0.0f, 0.0f);
-        DiffusionON = !DiffusionON;
-        lastKeyPressTime = currentTime;
-    }
-    else
-    {
-        pointlight1.turnDiffuseOn();
-        pointlight2.turnDiffuseOn();
-        lightingShader.setVec3("directionalLight.diffuse", 0.8f, 0.8f, 0.8f);
-        lightingShader.setVec3("spotLight.diffuse", 0.8f, 0.8f, 0.8f);
-        DiffusionON = !DiffusionON;
-        lastKeyPressTime = currentTime;
-    }
-}
-void specular_on_off(Shader& lightingShader)
-{
-    double currentTime = glfwGetTime();
-    if (currentTime - lastKeyPressTime < keyPressDelay) return;
-    lightingShader.use();
-    if (SpecularON)
-    {
-        pointlight1.turnSpecularOff();
-        pointlight2.turnSpecularOff();
-        lightingShader.setVec3("directionalLight.specular", 0.0f, 0.0f, 0.0f);
-        lightingShader.setVec3("spotLight.specular", 0.0f, 0.0f, 0.0f);
-        SpecularON = !SpecularON;
-        lastKeyPressTime = currentTime;
-    }
-    else
-    {
-        pointlight1.turnSpecularOn();
-        pointlight2.turnSpecularOn();
-        lightingShader.setVec3("directionalLight.specular", 1.0f, 1.0f, 1.0f);
-        lightingShader.setVec3("spotLight.specular", 1.0f, 1.0f, 1.0f);
-        SpecularON = !SpecularON;
-        lastKeyPressTime = currentTime;
-    }
-}
+//void ambienton_off(Shader& lightingShader)
+//{
+//    double currentTime = glfwGetTime();
+//    if (currentTime - lastKeyPressTime < keyPressDelay) return;
+//    lightingShader.use();
+//    if (AmbientON)
+//    {
+//        pointlight1.turnAmbientOff();
+//        pointlight2.turnAmbientOff();
+//        lightingShader.setVec3("directionalLight.ambient", 0.0f, 0.0f, 0.0f);
+//        lightingShader.setVec3("spotLight.ambient", 0.0f, 0.0f, 0.0f);
+//        AmbientON = !AmbientON;
+//        lastKeyPressTime = currentTime;
+//    }
+//    else
+//    {
+//        pointlight1.turnAmbientOn();
+//        pointlight2.turnAmbientOn();
+//        lightingShader.setVec3("directionalLight.ambient", 0.2f, 0.2f, 0.2f);
+//        lightingShader.setVec3("spotLight.ambient", 0.2f, 0.2f, 0.2f);
+//        AmbientON = !AmbientON;
+//        lastKeyPressTime = currentTime;
+//    }
+//}
+//void diffuse_on_off(Shader& lightingShader)
+//{
+//    double currentTime = glfwGetTime();
+//    if (currentTime - lastKeyPressTime < keyPressDelay) return;
+//    lightingShader.use();
+//    if (DiffusionON)
+//    {
+//        pointlight1.turnDiffuseOff();
+//        pointlight2.turnDiffuseOff();
+//        lightingShader.setVec3("directionalLight.diffuse", 0.0f, 0.0f, 0.0f);
+//        lightingShader.setVec3("spotLight.diffuse", 0.0f, 0.0f, 0.0f);
+//        DiffusionON = !DiffusionON;
+//        lastKeyPressTime = currentTime;
+//    }
+//    else
+//    {
+//        pointlight1.turnDiffuseOn();
+//        pointlight2.turnDiffuseOn();
+//        lightingShader.setVec3("directionalLight.diffuse", 0.8f, 0.8f, 0.8f);
+//        lightingShader.setVec3("spotLight.diffuse", 0.8f, 0.8f, 0.8f);
+//        DiffusionON = !DiffusionON;
+//        lastKeyPressTime = currentTime;
+//    }
+//}
+//void specular_on_off(Shader& lightingShader)
+//{
+//    double currentTime = glfwGetTime();
+//    if (currentTime - lastKeyPressTime < keyPressDelay) return;
+//    lightingShader.use();
+//    if (SpecularON)
+//    {
+//        pointlight1.turnSpecularOff();
+//        pointlight2.turnSpecularOff();
+//        lightingShader.setVec3("directionalLight.specular", 0.0f, 0.0f, 0.0f);
+//        lightingShader.setVec3("spotLight.specular", 0.0f, 0.0f, 0.0f);
+//        SpecularON = !SpecularON;
+//        lastKeyPressTime = currentTime;
+//    }
+//    else
+//    {
+//        pointlight1.turnSpecularOn();
+//        pointlight2.turnSpecularOn();
+//        lightingShader.setVec3("directionalLight.specular", 1.0f, 1.0f, 1.0f);
+//        lightingShader.setVec3("spotLight.specular", 1.0f, 1.0f, 1.0f);
+//        SpecularON = !SpecularON;
+//        lastKeyPressTime = currentTime;
+//    }
+//}
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     //if (key == GLFW_KEY_1 && action == GLFW_PRESS)
@@ -1462,40 +1610,34 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         {
             pointlight1.turnOff();
             pointlight2.turnOff();
-            //pointlight3.turnOff();
-            //pointlight4.turnOff();
+            pointlight3.turnOff();
+            pointlight4.turnOff();
+            pointlight5.turnOff();
             pointLightOn = !pointLightOn;
         }
         else
         {
             pointlight1.turnOn();
             pointlight2.turnOn();
-            //pointlight3.turnOn();
-            //pointlight4.turnOn();
+            pointlight3.turnOn();
+            pointlight4.turnOn();
+            pointlight5.turnOn();
             pointLightOn = !pointLightOn;
         }
     }
     if (key == GLFW_KEY_1 && action == GLFW_PRESS)
     {
-        if (directionalLightOn)
-        {
-            directionalLightOn = !directionalLightOn;
-        }
-        else
-        {
-            directionalLightOn = !directionalLightOn;
-        }
+        directionLightOn = !directionLightOn;
     }
-    if (key == GLFW_KEY_3 && action == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS)
     {
-        if (SpotLightOn)
-        {
-            SpotLightOn = !SpotLightOn;
-        }
-        else
-        {
-            SpotLightOn = !SpotLightOn;
-        }
+        spotlight1.turnOn();
+
+    }
+    if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
+    {
+        spotlight1.turnOff();
+
     }
 }
 
