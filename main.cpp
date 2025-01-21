@@ -75,7 +75,7 @@ float scale_Z = 1.0;
 float moveZ = 0.0;
 // camera
 //Camera camera(glm::vec3(0.0f, 1.1f, -5.2f));
-Camera camera(glm::vec3(31.0f, 14.1f, -12.2f));
+Camera camera(glm::vec3(21.0f, 14.1f, -20.2f));
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -383,6 +383,39 @@ int main()
     string wa_one = "wall2.jpg";
     unsigned int wall_four_tex = loadTexture(wa_one.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
     Cube room_left_wall_inside2= Cube(wall_four_tex, wall_four_tex, 32.0f, 0.0f, 0.0f, 1.0f, 1.0f);
+
+    string wa_two = "wall4.jpg";
+    unsigned int wall_fr_tex = loadTexture(wa_two.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    Cube room_mid_wall_study = Cube(wall_fr_tex, wall_four_tex, 32.0f, 0.0f, 0.0f, 1.0f, 1.0f);
+    //outside
+    string stair1 = "stairs.jpg";
+    unsigned int stair1ff = loadTexture(stair1.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    Cube stair = Cube(stair1ff, stair1ff, 32.0f, 0.0f, 0.0f, 1.0f, 1.0f);
+
+    string street1 = "street.jpg";
+    unsigned int street1dd = loadTexture(street1.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    Cube street = Cube(street1dd, street1dd, 32.0f, 0.0f, 0.0f, 1.0f, 1.0f);
+
+    string grass1 = "wall4.jpg";
+    unsigned int grass1dd = loadTexture(grass1.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    Cube grass = Cube(grass1dd, grass1dd, 32.0f, 0.0f, 0.0f, 1.0f, 1.0f);
+
+    //inside
+    string cash_w = "cash_wall4.jpg";
+    unsigned int cash_wdd = loadTexture(cash_w.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    Cube cash_wall = Cube(cash_wdd, cash_wdd, 32.0f, 0.0f, 0.0f, 1.0f, 1.0f);
+    //patterns
+    string cute = "cute_color.jpg";
+    unsigned int cud = loadTexture(cute.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    Cube pattern4 = Cube(cud, cud, 32.0f, 0.0f, 0.0f, 1.0f, 1.0f);
+    //
+    string cutesc = "sofa2.jpg";
+    unsigned int cdsud = loadTexture(cutesc.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    Cube sofa_seat = Cube(cdsud, cdsud, 32.0f, 0.0f, 0.0f, 1.0f, 1.0f);
+    //sofa table
+    string cuteasc = "pattern3.jpg";
+    unsigned int cdsfud = loadTexture(cuteasc.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    Cube sofa_table = Cube(cdsfud, cdsfud, 32.0f, 0.0f, 0.0f, 1.0f, 1.0f);
     /////////////////////////
     string lamp = "pattern.jpg";
     unsigned int lamp_tex = loadTexture(lamp.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
@@ -577,6 +610,29 @@ int main()
         modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(100.0, 0.8, 70.0));
         floor_cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
 
+        //stairs
+        /*int stairCount = 5;
+        float stair_y = -3.0, stair_translate_z = -10.0, stair_scale_z = 75.0;
+        while (stairCount--)
+        {
+            modelMatrixForContainer = glm::mat4(1.0f);
+            modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-46.0, stair_y, stair_translate_z));
+            modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(100.0, 2.0, 75.0));
+            stair.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+            stair_y -= 2.0;
+            stair_scale_z += 5.0;
+            stair_translate_z -= 5.0;
+        }*/
+        //street
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-6.0, -13.0, -90.0));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(10.0, 0.8, 50.0));
+        //street.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+        //grass
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(20.0, -13.0, -90.0));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(20.0, 0.8, 40.0));
+        //grass.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
         //books 
         modelMatrixForContainer = glm::mat4(1.0f);
         modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-35.0f, -0.6f, 14.0f));
@@ -708,6 +764,12 @@ int main()
     modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(52.5, -0.8, -5.0));
     modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(1.5, 10.0, 70.0));
     room_left_wall.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+
+    //back wall-round table-OUTside)
+    modelMatrixForContainer = glm::mat4(1.0f);
+    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-10.0, -0.8, 67.0));
+    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(62.0, 10.0, 1.5));
+    room_left_wall.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
     //left wall-round table-INSIde1)
     modelMatrixForContainer = glm::mat4(1.0f);
     modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(52.0, -0.8, -5.0));
@@ -718,12 +780,101 @@ int main()
     modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(52.0, -0.8, 35.0));
     modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.5, 10.0, 30.0));
     room_left_wall_inside2.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    //mid wall in study section
+    modelMatrixForContainer = glm::mat4(1.0f);
+    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(20.0, -0.8, 65.0));
+    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(32.0, 10.0, 0.5));
+    room_mid_wall_study.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
     ///////////////////////////////////
+    // 
+    // cash booth behind wall
+    modelMatrixForContainer = glm::mat4(1.0f);
+    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-4.0, -0.8, 33.5));
+    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(20.0, 10.0, 0.6));
+    cash_wall.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    //kitchen right wall
+    modelMatrixForContainer = glm::mat4(1.0f);
+    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-4.0, -0.8, 33.5));
+    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.1, 10.0, 30.0));
+    cash_left_wall.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+
+    //sofa seat
+    modelMatrixForContainer = glm::mat4(1.0f);
+    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(20.0, 0.2, 11.2));
+    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(4.0f, 1.2f, 4.0f));
+    sofa_seat.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    //sofa back 1
+    modelMatrixForContainer = glm::mat4(1.0f);
+    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(20.0, 1.4, 14.2));
+    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(4.0f, 2.2f, 1.0f));
+    sofa_seat.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    //sofa leg 1
+    modelMatrixForContainer = glm::mat4(1.0f);
+    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(20.0, -0.8, 11.2));
+    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.5f, 1.0f, 0.5f));
+    sofa_seat.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    //sofa 2
+    modelMatrixForContainer = glm::mat4(1.0f);
+    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(30.0, 0.2, 5.0));
+    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(4.0f, 1.2f, 4.0f));
+    sofa_seat.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    //sofa back 2
+    modelMatrixForContainer = glm::mat4(1.0f);
+    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(33.0, 1.4, 5.0));
+    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(1.0f, 2.2f, 4.0f));
+    sofa_seat.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    //sofa 3
+    modelMatrixForContainer = glm::mat4(1.0f);
+    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(20.0, 0.2, -0.5));
+    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(4.0f, 1.2f, 4.0f));
+    sofa_seat.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    //back 3
+    modelMatrixForContainer = glm::mat4(1.0f);
+    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(20.0, 1.4, -0.6));
+    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(4.0f, 2.2f, 1.0f));
+    sofa_seat.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    //sofa 4
+    modelMatrixForContainer = glm::mat4(1.0f);
+    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(11.0, 0.2, 5.0));
+    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(4.0f, 1.2f, 4.0f));
+    sofa_seat.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    //back 4
+    modelMatrixForContainer = glm::mat4(1.0f);
+    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(11.0, 1.4, 5.0));
+    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(1.0f, 2.2f, 4.0f));
+    sofa_seat.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    //between sofa table
+    modelMatrixForContainer = glm::mat4(1.0f);
+    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(18.0, -0.6, 5.2));
+    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(8.0f, 1.4f, 3.5f));
+    sofa_table.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    //main table
+    //table board
+   /* scale = glm::scale(identityMatrix, glm::vec3(8.0f, 1.4f, 3.5f));
+    translate = glm::translate(identityMatrix, glm::vec3(18.0, -0.8, 5.2));
+    model = translate * scale;
+    drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
+    */
+
+    //room right  wall
+    modelMatrixForContainer = glm::mat4(1.0f);
+    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-45.0, -0.8, 0.0));
+    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.4, 10.0, 50.0));
+    pattern4.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+
+    modelMatrixForContainer = glm::mat4(1.0f);
+    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-40.0f, -0.8f, 38.4f));
+    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.2f, 10.0f, 10.0f));
+    football_cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+   
+
+    
+    //cash booth
        modelMatrixForContainer = glm::mat4(1.0f);
-        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(11.0f, 1.25f, 2.0f));
-        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(2.5f, 2.5f, 2.5f));
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(20.0f, 4.25f, 20.0f));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(4.5f, 4.5f, 4.5f));
         //cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
-        disctex.drawCylinder(lightingShaderWithTexture, laughEmoji, modelMatrixForContainer);
+        disctex.drawCylinder(lightingShaderWithTexture, lamp_tex, modelMatrixForContainer);
 
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
@@ -872,20 +1023,20 @@ void frontWall(unsigned int& cubeVAO, Shader& lightingShader, Cylinder& cylinder
     model = translate * scale;
     drawCube(cubeVAO, lightingShader, model, 0.565f, 0.933f, 0.565f, 32.0);*/
     //back wall
-    scale = glm::scale(identityMatrix, glm::vec3(62.0, 10.0, 0.1));
+    /*scale = glm::scale(identityMatrix, glm::vec3(62.0, 10.0, 0.1));
     translate = glm::translate(identityMatrix, glm::vec3(-10.0, -0.8, 65.0));
     model = translate * scale;
-    drawCube(cubeVAO, lightingShader, model, 0.565f, 0.933f, 0.565f, 32.0);
+    drawCube(cubeVAO, lightingShader, model, 0.565f, 0.933f, 0.565f, 32.0);*/
     //right wall,behind book shelf
-    scale = glm::scale(identityMatrix, glm::vec3(0.1, 10.0, 70.0));
+    /*scale = glm::scale(identityMatrix, glm::vec3(0.1, 10.0, 70.0));
     translate = glm::translate(identityMatrix, glm::vec3(-40.0, -0.8, -10.0));
     model = translate * scale;
-    drawCube(cubeVAO, lightingShader, model, 0.565f, 0.933f, 0.565f, 32.0);
+    drawCube(cubeVAO, lightingShader, model, 0.565f, 0.933f, 0.565f, 32.0);*/
     //cash counter wall
-    scale = glm::scale(identityMatrix, glm::vec3(20.0, 10.0, 0.1));
-    translate = glm::translate(identityMatrix, glm::vec3(1.0, -0.8, 40.0));
-    model = translate * scale;
-    drawCube(cubeVAO, lightingShader, model, 0.933f, 0.510f, 0.933f, 32.0);
+    ///*scale = glm::scale(identityMatrix, glm::vec3(20.0, 10.0, 0.1));
+    //translate */= glm::translate(identityMatrix, glm::vec3(1.0, -0.8, 40.0));
+    //model = translate * scale;
+    //drawCube(cubeVAO, lightingShader, model, 0.933f, 0.510f, 0.933f, 32.0);
     //right side wall(counter
     scale = glm::scale(identityMatrix, glm::vec3(0.1, 10.0, 15.0));
     translate = glm::translate(identityMatrix, glm::vec3(1.0, -0.8, 40.0));
@@ -1043,63 +1194,8 @@ void frontWall(unsigned int& cubeVAO, Shader& lightingShader, Cylinder& cylinder
 
    
 
-    //main table
-    //table board
-    scale = glm::scale(identityMatrix, glm::vec3(8.0f, 1.4f, 3.5f));
-    translate = glm::translate(identityMatrix, glm::vec3(18.0, -0.8, 5.2));
-    model = translate * scale;
-    drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
+    
 
-    //sofa 1
-    scale = glm::scale(identityMatrix, glm::vec3(4.0f, 1.2f, 4.0f));
-    translate = glm::translate(identityMatrix, glm::vec3(20.0, 0.2, 11.2));
-    model = translate * scale;
-    drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
-    //sofa back 1
-    //rotation = glm::rotate(model, glm::radians(10.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-    scale = glm::scale(identityMatrix, glm::vec3(4.0f, 2.2f, 1.0f));
-    translate = glm::translate(identityMatrix, glm::vec3(20.0, 1.4, 14.2));
-    //rotation = glm::rotate(identityMatrix, glm::radians(10.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-    model = translate * scale*rotation;
-    drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
-    //sofa leg 1
-    scale = glm::scale(identityMatrix, glm::vec3(0.5f, 1.0f, 0.5f));
-    translate = glm::translate(identityMatrix, glm::vec3(20.0, -0.8, 11.2));
-    model = translate * scale;
-    drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
-
-    //sofa 2
-    scale = glm::scale(identityMatrix, glm::vec3(4.0f, 1.2f, 4.0f));
-    translate = glm::translate(identityMatrix, glm::vec3(30.0, 0.2, 5.0));
-    model = translate * scale;
-    drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
-    //sofa back 2
-    scale = glm::scale(identityMatrix, glm::vec3(1.0f, 2.2f, 4.0f));
-    translate = glm::translate(identityMatrix, glm::vec3(33.0, 1.4, 5.0));
-    model = translate * scale;
-    drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
-
-    //sofa 3
-    scale = glm::scale(identityMatrix, glm::vec3(4.0f, 1.2f, 4.0f));
-    translate = glm::translate(identityMatrix, glm::vec3(20.0, 0.2, -0.3));
-    model = translate * scale;
-    drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
-    //back
-    scale = glm::scale(identityMatrix, glm::vec3(4.0f, 2.2f, 1.0f));
-    translate = glm::translate(identityMatrix, glm::vec3(20.0, 1.4, -0.2));
-    model = translate * scale;
-    drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
-
-    //sofa 4
-    scale = glm::scale(identityMatrix, glm::vec3(4.0f, 1.2f, 4.0f));
-    translate = glm::translate(identityMatrix, glm::vec3(11.0, 0.2, 5.0));
-    model = translate * scale;
-    drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
-    //back
-    scale = glm::scale(identityMatrix, glm::vec3(1.0f, 2.2f, 4.0f));
-    translate = glm::translate(identityMatrix, glm::vec3(11.0, 1.4, 5.0));
-    model = translate * scale;
-    drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
     //table leg 1
     scale = glm::scale(identityMatrix, glm::vec3(0.2f, -1.5f, 0.2f));
     translate = glm::translate(identityMatrix, glm::vec3(-2.0, 0.6, -2.2));
