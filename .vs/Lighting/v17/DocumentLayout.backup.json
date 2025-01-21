@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{FC920F35-5119-4F2D-8BF5-F04F11F55C0D}|Lighting.vcxproj|G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\fragmentShaderForPhongShadingWithTexture.fs||{3B902123-F8A7-4915-9F01-361F908088D0}",
-      "RelativeMoniker": "D:0:0:{FC920F35-5119-4F2D-8BF5-F04F11F55C0D}|Lighting.vcxproj|solutionrelative:fragmentShaderForPhongShadingWithTexture.fs||{3B902123-F8A7-4915-9F01-361F908088D0}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{FC920F35-5119-4F2D-8BF5-F04F11F55C0D}|Lighting.vcxproj|G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{FC920F35-5119-4F2D-8BF5-F04F11F55C0D}|Lighting.vcxproj|solutionrelative:main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FC920F35-5119-4F2D-8BF5-F04F11F55C0D}|Lighting.vcxproj|G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\fragmentShaderForPhongShadingWithTexture.fs||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{FC920F35-5119-4F2D-8BF5-F04F11F55C0D}|Lighting.vcxproj|solutionrelative:fragmentShaderForPhongShadingWithTexture.fs||{3B902123-F8A7-4915-9F01-361F908088D0}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{FC920F35-5119-4F2D-8BF5-F04F11F55C0D}|Lighting.vcxproj|G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\fragmentShaderForPhongShading.fs||{3B902123-F8A7-4915-9F01-361F908088D0}",
@@ -54,7 +54,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
@@ -67,7 +67,19 @@
               "ViewState": "AgIAACoAAAAAAAAAAAAIwDkAAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
               "WhenOpened": "2025-01-13T04:37:24.256Z",
-              "IsPinned": true,
+              "IsPinned": true
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "main.cpp",
+              "DocumentMoniker": "G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\main.cpp",
+              "RelativeDocumentMoniker": "main.cpp",
+              "ToolTip": "G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\main.cpp*",
+              "RelativeToolTip": "main.cpp*",
+              "ViewState": "AgIAAHcCAAAAAAAAAAAAAIICAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-01-20T19:58:07.775Z",
               "EditorCaption": ""
             },
             {
@@ -80,8 +92,7 @@
               "RelativeToolTip": "sphere.h",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-01-20T20:56:11.552Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-20T20:56:11.552Z"
             },
             {
               "$type": "Document",
@@ -93,34 +104,19 @@
               "RelativeToolTip": "fragmentShaderForGouraudShading.fs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-01-20T20:45:46.259Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "fragmentShaderForPhongShadingWithTexture.fs",
-              "DocumentMoniker": "G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\fragmentShaderForPhongShadingWithTexture.fs",
-              "RelativeDocumentMoniker": "fragmentShaderForPhongShadingWithTexture.fs",
-              "ToolTip": "G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\fragmentShaderForPhongShadingWithTexture.fs*",
-              "RelativeToolTip": "fragmentShaderForPhongShadingWithTexture.fs*",
-              "ViewState": "AgIAABgAAAAAAAAAAAAAADAAAAAYAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-01-20T13:25:35.344Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-20T20:45:46.259Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "main.cpp",
-              "DocumentMoniker": "G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\main.cpp",
-              "RelativeDocumentMoniker": "main.cpp",
-              "ToolTip": "G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\main.cpp",
-              "RelativeToolTip": "main.cpp",
-              "ViewState": "AgIAAEkCAAAAAAAAAAAAAF0GAAAsAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-01-20T19:58:07.775Z",
-              "EditorCaption": ""
+              "Title": "fragmentShaderForPhongShadingWithTexture.fs",
+              "DocumentMoniker": "G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\fragmentShaderForPhongShadingWithTexture.fs",
+              "RelativeDocumentMoniker": "fragmentShaderForPhongShadingWithTexture.fs",
+              "ToolTip": "G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\fragmentShaderForPhongShadingWithTexture.fs",
+              "RelativeToolTip": "fragmentShaderForPhongShadingWithTexture.fs",
+              "ViewState": "AgIAABgAAAAAAAAAAAAAADAAAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-01-20T13:25:35.344Z"
             },
             {
               "$type": "Document",
@@ -132,8 +128,7 @@
               "RelativeToolTip": "SpotLight.h",
               "ViewState": "AgIAAC0AAAAAAAAAAAAAAHIAAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-01-20T20:08:46.866Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-20T20:08:46.866Z"
             },
             {
               "$type": "Document",
@@ -145,8 +140,7 @@
               "RelativeToolTip": "pointLight.h",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAANcAAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-01-20T20:09:54.747Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-20T20:09:54.747Z"
             },
             {
               "$type": "Document",
@@ -158,8 +152,7 @@
               "RelativeToolTip": "vertexShaderForPhongShading.vs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-01-20T20:01:28.842Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-20T20:01:28.842Z"
             },
             {
               "$type": "Document",
@@ -171,8 +164,7 @@
               "RelativeToolTip": "vertexShaderForPhongShadingWithTexture.vs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-01-20T20:44:10.152Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-20T20:44:10.152Z"
             },
             {
               "$type": "Document",
@@ -184,8 +176,7 @@
               "RelativeToolTip": "vertexShaderForGouraudShading.vs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-01-20T20:01:26.841Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-20T20:01:26.841Z"
             },
             {
               "$type": "Document",
@@ -197,8 +188,7 @@
               "RelativeToolTip": "cube.h",
               "ViewState": "AgIAADwAAAAAAAAAAAAlwEkAAAAlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-12-13T15:43:25.473Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-13T15:43:25.473Z"
             },
             {
               "$type": "Bookmark",

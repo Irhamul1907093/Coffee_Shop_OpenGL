@@ -356,7 +356,6 @@ int main()
     unsigned int football_tex = loadTexture(football.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
     Cube football_cube = Cube(football_tex, football_tex, 32.0f, 0.0f, 0.0f, 1.0f, 1.0f);
     
-
     string books = "booktex.jpg";
     unsigned int books_tex = loadTexture(books.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
     Cube book_cube = Cube(books_tex, books_tex, 32.0f, 0.0f, 0.0f, 1.0f, 1.0f);
@@ -365,12 +364,22 @@ int main()
     unsigned int floor_tex = loadTexture(floors.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
     Cube floor_cube = Cube(floor_tex, floor_tex, 32.0f, 0.0f, 0.0f, 1.0f, 1.0f);
 
+    string longTable = "long_table.jpg";
+    unsigned int lombatable_tex = loadTexture(longTable.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    Cube long_table_cube = Cube(lombatable_tex, lombatable_tex, 32.0f, 0.0f, 0.0f, 1.0f, 1.0f);
 
+    /////////////////////////
     string lamp = "pattern.jpg";
     unsigned int lamp_tex = loadTexture(lamp.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
     
+    string goltable = "roundtable.jpg";
+    unsigned int round_table_tex = loadTexture(goltable.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
    
-   // Cube cube = Cube(coffepic, coffepic, 32.0f, 0.0f, 0.0f, 1.0f, 1.0f);
+    string woodStripe = "wood_stripe.jpg";
+    unsigned int wood_strip_tex = loadTexture(woodStripe.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    
+    
+    // Cube cube = Cube(coffepic, coffepic, 32.0f, 0.0f, 0.0f, 1.0f, 1.0f);
 
     SphereTex spheretex = SphereTex();
     CylinderTex cylindertex = CylinderTex();
@@ -415,17 +424,6 @@ int main()
         lightingShader.use();
         lightingShader.setVec3("viewPos", camera.Position);
 
-        // pass projection matrix to shader (note that in this case it could change every frame)
-        //glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-        //glm::mat4 projection = glm::ortho(-2.0f, +2.0f, -1.5f, +1.5f, 0.1f, 100.0f);
-
-
-        // camera/view transformation
-        //glm::mat4 view = camera.GetViewMatrix();
-        //glm::mat4 view = basic_camera.createViewMatrix();
-
-
-
         // point light 1
         pointlight1.setUpPointLight(lightingShader);
         // point light 2
@@ -437,10 +435,6 @@ int main()
         // point light 5
         pointlight5.setUpPointLight(lightingShader);
 
-        // activate shader
-        //lightingShader.use();
-
-
         lightingShader.setVec3("directionalLight.directiaon", 0.5f, -3.0f, -3.0f);
         lightingShader.setVec3("directionalLight.ambient", .5f, .5f, .5f);
         lightingShader.setVec3("directionalLight.diffuse", .8f, .8f, .8f);
@@ -450,40 +444,6 @@ int main()
         lightingShader.setBool("directionLightOn", directionLightOn);
 
         spotlight1.setUpspotLight(lightingShader);
-
-        //lightingShader.use();
-        /*lightingShader.setVec3("directionalLight.direction", 0.5f, -3.0f, -3.0f);
-        if (AmbientON) {
-            lightingShader.setVec3("directionalLight.ambient", 0.2f, 0.2f, 0.2f);
-            lightingShader.setVec3("spotLight.ambient", 0.2f, 0.2f, 0.2f);
-        }
-        if (DiffusionON) {
-            lightingShader.setVec3("directionalLight.diffuse", 0.8f, 0.8f, 0.8f);
-            lightingShader.setVec3("spotLight.diffuse", 0.8f, 0.8f, 0.8f);
-        }
-        if (SpecularON) {
-
-            lightingShader.setVec3("directionalLight.specular", 1.0f, 1.0f, 1.0f);
-            lightingShader.setVec3("spotLight.specular", 1.0f, 1.0f, 1.0f);
-        }*/
-
-        /*lightingShader.setBool("directionalLightON", directionalLightOn);
-        lightingShader.setBool("SpotLightON", SpotLightOn);
-
-        lightingShader.setVec3("spotLight.direction", 0.0f, -1.0f, 0.0f);
-        lightingShader.setVec3("spotLight.position", -3.0f, 4.0f, 4.0f);
-
-
-
-        lightingShader.setFloat("spotLight.k_c", 1.0f);
-        lightingShader.setFloat("spotLight.k_l", 0.09f);
-        lightingShader.setFloat("spotLight.k_q", 0.032f);
-        lightingShader.setFloat("spotLight.cutOff", glm::cos(glm::radians(35.5f)));
-        lightingShader.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(40.5f)));*/
-
-        // pass projection matrix to shader (note that in this case it could change every frame)
-       // glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-        //glm::mat4 projection = glm::ortho(-2.0f, +2.0f, -1.5f, +1.5f, 0.1f, 100.0f);
 
         glm::mat4 projection = myPerspective(
             glm::radians(camera.Zoom),         // fov: field of view in radians
@@ -540,17 +500,10 @@ int main()
         sphere.drawSphere(lightingShader, model);
 
         bed(cubeVAO, lightingShader, model);
-        //draw floor
-        //floor(cubeVAO, lightingShader);
-        //axis(cubeVAO, lightingShader);
+       
         frontWall(cubeVAO, lightingShader, cylinder, hemisphere, cone, cutcone);
         rightWall(cubeVAO, lightingShader, cutcone, cylinder);
 
-        /*glm::mat4 sphereTranslate = glm::translate(identityMatrix, glm::vec3(-13.0f, 4.4f, -4.3f)); // Slightly above the table
-        glm::mat4 sphereScale = glm::scale(identityMatrix, glm::vec3(0.5f, 0.5f, 0.5f));          // Adjust sphere size
-        glm::mat4 sphereModel = sphereTranslate * sphereScale;
-        drawSphere(lightingShader, sphereModel, 0.8f, 0.3f, 0.3f);*/
-        // also draw the lamp object(s)
         ourShader.use();
         ourShader.setMat4("projection", projection);
         ourShader.setMat4("view", view);
@@ -568,19 +521,6 @@ int main()
             //glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
             //glDrawArrays(GL_TRIANGLES, 0, 36);
         }
-
-        //if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
-        //{
-        //    ambienton_off(lightingShader);
-        //}
-        //if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS)
-        //{
-        //    diffuse_on_off(lightingShader);
-        //}
-        //if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS)
-        //{
-        //    specular_on_off(lightingShader);
-        //}
 
         // be sure to activate shader when setting uniforms/drawing objects
         lightingShaderWithTexture.use();
@@ -624,7 +564,6 @@ int main()
 
         //books 
         modelMatrixForContainer = glm::mat4(1.0f);
-
         modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-35.0f, -0.6f, 14.0f));
         modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.2f, 7.6f, 16.0f));
         book_cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
@@ -648,11 +587,81 @@ int main()
             conetex.drawCone(lightingShaderWithTexture, lamp_tex, modelMatrixForContainer);
             dist += 11.0;
         }
-        /*scale = glm::scale(identityMatrix, glm::vec3(0.6, 0.05, 0.05));
-        translate = glm::translate(identityMatrix, glm::vec3(11.4f, 2.9f, -0.52f));*/
+        
+        //round table
+        /* glm::mat4 modelForCylinder = glm::mat4(1.0f);
+    modelForCylinder = glm::translate(modelForCylinder, glm::vec3(46.0f, 1.2f, 1.0f));
+    modelForCylinder = glm::rotate(modelForCylinder, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    modelForCylinder = glm::scale(modelForCylinder, glm::vec3(0.05f, 2.0f, 2.0f));
+    cylinder.drawCylinder(lightingShader, modelForCylinder);
 
-
+    //table stand 1
+    glm::mat4 stand1 = glm::mat4(1.0f);
+    stand1 = glm::translate(stand1, glm::vec3(46.0f, 0.2f, 1.0f));
+    stand1 = glm::rotate(stand1, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    stand1 = glm::scale(stand1, glm::vec3(1.0f, 0.2f,0.2f));
+    cylinder.drawCylinder(lightingShader, stand1);
+    //lower circle
+    glm::mat4 circle1 = glm::mat4(1.0f);
+    circle1 = glm::translate(circle1, glm::vec3(46.0f, -0.2f, 1.0f));
+    circle1 = glm::rotate(circle1, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    circle1 = glm::scale(circle1, glm::vec3(0.05f, 1.0f, 1.0f));
+    cylinder.drawCylinder(lightingShader, circle1);*/
+        
+    int round_table_count = 3;
+    float round_table_distance = 1.0;
+    while (round_table_count--)
+    {
         modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(46.0f, 1.2f, round_table_distance));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(2.0f, 0.1f, 2.0f));
+        disctex_2.drawCylinder(lightingShaderWithTexture, round_table_tex, modelMatrixForContainer);
+        round_table_distance += 11.0f;
+    }
+    
+    //*****problem here*****//
+    modelMatrixForContainer = glm::mat4(1.0f);
+    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(46.0f, 0.2f, 1.0f));
+    modelMatrixForContainer = glm::rotate(modelMatrixForContainer, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(1.0f, 0.2f, 0.2f));
+    //disctex_2.drawCylinder(lightingShaderWithTexture, wood_strip_tex, modelMatrixForContainer);
+    cylinder.drawCylinder(lightingShader, modelMatrixForContainer);
+    //lower circle
+    glm::mat4 circle1 = glm::mat4(1.0f);
+    circle1 = glm::translate(circle1, glm::vec3(46.0f, 0.2f, 1.0f));
+    circle1 = glm::rotate(circle1, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    circle1 = glm::scale(circle1, glm::vec3(0.05f, 1.0f, 1.0f));
+    disctex_2.drawCylinder(lightingShaderWithTexture, wood_strip_tex, circle1);
+    cylinder.drawCylinder(lightingShader, circle1);
+    //////////round table ends/////////////////
+
+    //long table for study
+    modelMatrixForContainer = glm::mat4(1.0f);
+    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(46.0, 2.0, 35.0));
+    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(5.0, 0.5, 28.0));
+    long_table_cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+
+    //long table cross stands
+    float bab = 37.0f;
+    int gg = 4;
+    while (gg--)
+    {
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(50.0f, -0.9f, bab));
+        model = glm::rotate(model, glm::radians(48.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+        model = glm::scale(model, glm::vec3(0.2f, 4.8f, 0.2f));
+        drawCube(cubeVAO, lightingShader, model, 0.929, 0.929, 0.133, 32.0);
+        //rgb01(0.929, 0.929, 0.133)
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(46.0f, -1.0f, bab));
+        model = glm::rotate(model, glm::radians(-48.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+        model = glm::scale(model, glm::vec3(0.2f, 5.0f, 0.2f));
+        drawCube(cubeVAO, lightingShader, model, 0.929, 0.929, 0.133, 32.0);
+        bab += 8.0f;
+    }
+
+    ///////////////////////////////////
+       modelMatrixForContainer = glm::mat4(1.0f);
         modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(11.0f, 1.25f, 2.0f));
         modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(2.5f, 2.5f, 2.5f));
         //cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
@@ -858,31 +867,31 @@ void frontWall(unsigned int& cubeVAO, Shader& lightingShader, Cylinder& cylinder
 
 
     //round table 1
-    glm::mat4 modelForCylinder = glm::mat4(1.0f);
+    /*glm::mat4 modelForCylinder = glm::mat4(1.0f);
     modelForCylinder = glm::translate(modelForCylinder, glm::vec3(46.0f, 1.2f, 1.0f));
     modelForCylinder = glm::rotate(modelForCylinder, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
     modelForCylinder = glm::scale(modelForCylinder, glm::vec3(0.05f, 2.0f, 2.0f));
-    cylinder.drawCylinder(lightingShader, modelForCylinder);
+    cylinder.drawCylinder(lightingShader, modelForCylinder);*/
 
     //table stand 1
-    glm::mat4 stand1 = glm::mat4(1.0f);
+    /*glm::mat4 stand1 = glm::mat4(1.0f);
     stand1 = glm::translate(stand1, glm::vec3(46.0f, 0.2f, 1.0f));
     stand1 = glm::rotate(stand1, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
     stand1 = glm::scale(stand1, glm::vec3(1.0f, 0.2f,0.2f));
     cylinder.drawCylinder(lightingShader, stand1);
     //lower circle
     glm::mat4 circle1 = glm::mat4(1.0f);
-    circle1 = glm::translate(circle1, glm::vec3(46.0f, -0.8f, 1.0f));
+    circle1 = glm::translate(circle1, glm::vec3(46.0f, -0.2f, 1.0f));
     circle1 = glm::rotate(circle1, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
     circle1 = glm::scale(circle1, glm::vec3(0.05f, 1.0f, 1.0f));
-    cylinder.drawCylinder(lightingShader, circle1);
+    cylinder.drawCylinder(lightingShader, circle1);*/
 
     //round table 2
-    glm::mat4 modelForCylinder2 = glm::mat4(1.0f);
+    /*glm::mat4 modelForCylinder2 = glm::mat4(1.0f);
     modelForCylinder2 = glm::translate(modelForCylinder2, glm::vec3(46.0f, 1.2f, 12.0f));
     modelForCylinder2 = glm::rotate(modelForCylinder2, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
     modelForCylinder2 = glm::scale(modelForCylinder2, glm::vec3(0.05f, 2.0f, 2.0f));
-    cylinder.drawCylinder(lightingShader, modelForCylinder2);
+    cylinder.drawCylinder(lightingShader, modelForCylinder2);*/
 
     //table stand 2
     glm::mat4 stand2 = glm::mat4(1.0f);
@@ -897,11 +906,11 @@ void frontWall(unsigned int& cubeVAO, Shader& lightingShader, Cylinder& cylinder
     circle2 = glm::scale(circle2, glm::vec3(0.05f, 1.0f, 1.0f));
     cylinder.drawCylinder(lightingShader, circle2);
 
-    glm::mat4 modelForCylinder3 = glm::mat4(1.0f);
+    /*glm::mat4 modelForCylinder3 = glm::mat4(1.0f);
     modelForCylinder3 = glm::translate(modelForCylinder3, glm::vec3(46.0f, 1.2f, 23.0f));
     modelForCylinder3 = glm::rotate(modelForCylinder3, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
     modelForCylinder3 = glm::scale(modelForCylinder3, glm::vec3(0.05f, 2.0f, 2.0f));
-    cylinder.drawCylinder(lightingShader, modelForCylinder3);
+    cylinder.drawCylinder(lightingShader, modelForCylinder3);*/
 
     //table stand 3
     glm::mat4 stand3 = glm::mat4(1.0f);
@@ -1112,7 +1121,7 @@ void frontWall(unsigned int& cubeVAO, Shader& lightingShader, Cylinder& cylinder
     drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
 
     //second chair
-    scale = glm::scale(identityMatrix, glm::vec3(1.2f, 0.2f, 1.2f));
+    /*scale = glm::scale(identityMatrix, glm::vec3(1.2f, 0.2f, 1.2f));
     translate = glm::translate(identityMatrix, glm::vec3(1.2, 0.4, -1.6));
     model = translate * scale;
     drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
@@ -1156,7 +1165,7 @@ void frontWall(unsigned int& cubeVAO, Shader& lightingShader, Cylinder& cylinder
     scale = glm::scale(identityMatrix, glm::vec3(0.2f, 0.2f, 1.2f));
     translate = glm::translate(identityMatrix, glm::vec3(2.2, 1.2, -1.6));
     model = translate * scale;
-    drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
+    drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);*/
 
 
 
@@ -1226,13 +1235,9 @@ void rightWall(unsigned int& cubeVAO, Shader& lightingShader, CutCone& cutcone, 
     model = translate * scale;
     drawCube(cubeVAO, lightingShader, model, 0.122, 0.361, 0.357, 32.0);
 
-    //long table-study
-    scale = glm::scale(identityMatrix, glm::vec3(5.0, 0.5, 28.0));
-    translate = glm::translate(identityMatrix, glm::vec3(46.0,2.0, 35.0));
-    model = translate * scale;
-    drawCube(cubeVAO, lightingShader, model, 0.788f, 0.604f, 0.145f, 32.0);
+    
     //long table cross
-    float bab = 37.0f;
+    /*float bab = 37.0f;
     int gg = 4;
     while (gg--)
     {
@@ -1248,7 +1253,7 @@ void rightWall(unsigned int& cubeVAO, Shader& lightingShader, CutCone& cutcone, 
         model = glm::scale(model, glm::vec3(0.2f, 5.0f, 0.2f));
         drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
         bab += 8.0f;
-    }
+    }*/
     
 
     //long table chairs
