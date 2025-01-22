@@ -89,7 +89,7 @@ float scale_Z = 1.0;
 float moveZ = 0.0;
 // camera
 //Camera camera(glm::vec3(0.0f, 1.1f, -5.2f));
-Camera camera(glm::vec3(10.0f, 14.1f, 22.2f));
+Camera camera(glm::vec3(10.0f, 14.1f, -62.2f));
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -126,8 +126,8 @@ glm::vec3 pointLightPositions[] = {
     glm::vec3(-13.0f, 6.4f, 36.7f),
     glm::vec3(-13.0f, 6.4f, 50.7f),
     //washroom 
-    glm::vec3(-50.0f, 6.4f, 50.7f),
-    glm::vec3(-36.0f, 6.4f, 50.7f),
+    glm::vec3(-40.0f, 6.4f, 50.7f),
+    glm::vec3(-26.0f, 6.4f, 50.7f),
     //bookshelf
     glm::vec3(-15.0f, 6.4f, 16.7f),
     glm::vec3(-26.0f, 6.4f, 20.7f),
@@ -759,7 +759,8 @@ int main()
     /////////////////////////
     string lamp = "pattern.jpg";
     unsigned int lamp_tex = loadTexture(lamp.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
-    
+    Cube letters_cube = Cube(lamp_tex, lamp_tex, 32.0f, 0.0f, 0.0f, 1.0f, 1.0f);
+
     string goltable = "roundtable.jpg";
     unsigned int round_table_tex = loadTexture(goltable.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
    
@@ -786,7 +787,7 @@ int main()
     BezierCurve cup = BezierCurve(cp_cup, 5 * 3, lamp_tex);
 
     TorusTex cup_handle = TorusTex(2, 5.0, 1.0);
-
+    TorusTex letter_O = TorusTex(1, 5.0, 1.0);
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 
@@ -1059,12 +1060,12 @@ int main()
         modelMatrixForContainer = glm::mat4(1.0f);
         modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-46.0, 9.0, -5.0));
         modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(100.0, 0.4, 70.0));
-        //ceiling.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+        ceiling.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
         //ceiling outer
        modelMatrixForContainer = glm::mat4(1.0f);
         modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-46.0, 9.4, -5.0));
         modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(100.0, 1.0, 70.0));
-        //ceiling2.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+        ceiling2.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
         //stairs
         int stairCount = 4;
         float stair_y = -3.0, stair_translate_z = -10.0, stair_scale_z = 75.0;
@@ -1073,26 +1074,88 @@ int main()
             modelMatrixForContainer = glm::mat4(1.0f);
             modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-46.0, stair_y, stair_translate_z));
             modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(100.0, 2.0, 75.0));
-            //stair.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+            stair.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
             stair_y -= 2.0;
-            stair_scale_z += 3.8;
+            stair_scale_z += 9.8;
             stair_translate_z -= 3.8;
         }
         //street
         modelMatrixForContainer = glm::mat4(1.0f);
-        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-4.0, -10.0, -80.0));
-        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(10.0, 1.0, 60.0));
-        //street.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-4.0, -10.0, -60.0));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(10.0, 1.0, 40.0));
+        street.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+
+        int stand = 8;
+        float gap = -60.0;
+        while (stand--)
+        {
+            modelMatrixForContainer = glm::mat4(1.0f);
+            modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-4.0, -10.0, gap));
+            modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.4f, 3.5f, 0.2f));
+            chair.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+
+            modelMatrixForContainer = glm::mat4(1.0f);
+            modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(6.0, -10.0, gap));
+            modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.4f, 3.5f, 0.2f));
+            chair.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+            gap += 4.0;
+        }
+        //stand 1
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(52.0, -10.0, -22.0));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.8f, 11.0f, 0.4f));
+        chair.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+        //sphere light 1
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(52.5, 1.0, -22.0));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(1.0f, 1.0f, 1.0f));
+        sphere.drawSphere(lightingShaderWithTexture, modelMatrixForContainer);
+
+        //stand 2
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(52.0, -10.0, -60.0));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.8f, 11.0f, 0.4f));
+        chair.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+        //light 2
+        //sphere light 2
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(52.5, 1.0, -60.0));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(1.0f, 1.0f, 1.0f));
+        sphere.drawSphere(lightingShaderWithTexture, modelMatrixForContainer);
+        
+        //stand 3
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-47.0, -10.0, -22.0));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.8f, 11.0f, 0.4f));
+        chair.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+        //light 3
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-47.0, 1.0, -22.0));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(1.0f, 1.0f, 1.0f));
+        sphere.drawSphere(lightingShaderWithTexture, modelMatrixForContainer);
+
+        //stand 4
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-47.0, -10.0, -60.0));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.8f, 11.0f, 0.4f));
+        chair.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+
+        //sphere light 4
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-47.0, 1.0, -60.0));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(1.0f, 1.0f, 1.0f));
+        sphere.drawSphere(lightingShaderWithTexture, modelMatrixForContainer);
+
         //grass
         modelMatrixForContainer = glm::mat4(1.0f);
-        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(6.0, -10.0, -80.0));
-        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(48.0, 1.0, 60.0));
-        //grass.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(6.0, -10.0, -60.0));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(48.0, 1.0, 40.0));
+        grass.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
 
         modelMatrixForContainer = glm::mat4(1.0f);
-        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-52.0, -10.0, -80.0));
-        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(48.0, 1.0, 60.0));
-        //grass.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-47.0, -10.0, -60.0));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(43.0, 1.0, 40.0));
+        grass.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
         
         //sphere with tex
         modelMatrixForContainer = glm::mat4(1.0f);
@@ -1105,19 +1168,152 @@ int main()
 
         //Bezier Curve with texture
         modelMatrixForContainer = glm::mat4(1.0f);
-        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(0.0f, 0.0f, 0.0f));
-        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(10.5f, 10.5f, 10.5f));
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(40.0f, 10.0f, -5.0f));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(8.5f, 8.5f, 8.5f));
         modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.5f, 0.5f, 0.5f));
         cup.drawBezierCurve(lightingShaderWithTexture, modelMatrixForContainer);
 
         modelMatrixForContainer = glm::mat4(1.0f);
-        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(7.0f, 13.0f, 0.0f));
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(42.7f, 14.4f, -5.0f));
         modelMatrixForContainer = glm::rotate(modelMatrixForContainer, glm::radians(-100.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.8f, 0.8f,0.8f));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.6f, 0.6f,0.6f));
         modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.5f, 0.5f, 0.5f));
         cup_handle.drawTorus(lightingShaderWithTexture, lamp_tex,modelMatrixForContainer);
 
+        glm::mat4 circle1 = glm::mat4(1.0f);
+        circle1 = glm::translate(circle1, glm::vec3(40.0f, 11.0f, -5.0f));
+        circle1 = glm::rotate(circle1, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+        circle1 = glm::scale(circle1, glm::vec3(0.4f, 5.0f, 5.0f));
+        cylinder.drawCylinder(lightingShader, circle1);
+        //C
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(27.7f, 14.4f, -5.0f));
+        modelMatrixForContainer = glm::rotate(modelMatrixForContainer, glm::radians(-90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.7f, 0.7f, 0.7f));
+        cup_handle.drawTorus(lightingShaderWithTexture, lamp_tex, modelMatrixForContainer);
+        //O
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(20.7f, 14.4f, -5.0f));
+        modelMatrixForContainer = glm::rotate(modelMatrixForContainer, glm::radians(-90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.7f, 0.7f, 0.7f));
+        letter_O.drawTorus(lightingShaderWithTexture, lamp_tex, modelMatrixForContainer);
+        //F
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(12.7f, 10.4f, -5.0f));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(1.0, 8.0, 1.0));
+        letters_cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
 
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(9.7f, 17.4f, -5.0f));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(4.0, 1.0, 1.0));
+        letters_cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(9.7f, 13.4f, -5.0f));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(4.0, 1.0, 1.0));
+        letters_cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+        //F - 2
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(5.7f, 10.4f, -5.0f));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(1.0, 8.0, 1.0));
+        letters_cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(2.7f, 17.4f, -5.0f));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(4.0, 1.0, 1.0));
+        letters_cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(2.7f, 13.4f, -5.0f));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(4.0, 1.0, 1.0));
+        letters_cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+        //E
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-1.3f, 10.4f, -5.0f));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(1.0, 8.0, 1.0));
+        letters_cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-4.3f, 17.4f, -5.0f));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(4.0, 1.0, 1.0));
+        letters_cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-4.3f, 13.4f, -5.0f));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(4.0, 1.0, 1.0));
+        letters_cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-4.3f, 10.4f, -5.0f));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(4.0, 1.0, 1.0));
+        letters_cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+        //T
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-14.3f, 10.4f, -5.0f));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(1.0, 8.0, 1.0));
+        letters_cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-16.7f, 17.4f, -5.0f));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(6.0, 1.0, 1.0));
+        letters_cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+        //I
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-22.3f, 10.4f, -5.0f));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(1.0, 8.0, 1.0));
+        letters_cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-24.7f, 17.4f, -5.0f));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(6.0, 1.0, 1.0));
+        letters_cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-24.7f, 10.4f, -5.0f));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(6.0, 1.0, 1.0));
+        letters_cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+        //M
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-28.3f, 10.4f, -5.0f));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(1.0, 8.0, 1.0));
+        letters_cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-30.4f, 14.9f, -5.0f));
+        modelMatrixForContainer = glm::rotate(modelMatrixForContainer, glm::radians(40.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(1.0, 4.0, 1.0));
+        letters_cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-30.6f, 15.0f, -5.0f));
+        modelMatrixForContainer = glm::rotate(modelMatrixForContainer, glm::radians(-35.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(1.0, 4.0, 1.0));
+        letters_cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-32.8f, 10.4f, -5.0f));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(1.0, 8.0, 1.0));
+        letters_cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+        //E
+        //E
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-36.3f, 10.4f, -5.0f));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(1.0, 8.0, 1.0));
+        letters_cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-40.3f, 17.4f, -5.0f));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(4.0, 1.0, 1.0));
+        letters_cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-40.3f, 13.4f, -5.0f));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(4.0, 1.0, 1.0));
+        letters_cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-40.3f, 10.4f, -5.0f));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(4.0, 1.0, 1.0));
+        letters_cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
 
         //sitting phot booth
         modelMatrixForContainer = glm::mat4(1.0f);
@@ -1126,68 +1322,58 @@ int main()
         //cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
         //spheretex.drawSphere(lightingShaderWithTexture, laughEmoji, modelMatrixForContainer);
        // cylindertex.drawCylinder(lightingShaderWithTexture, laughEmoji, modelMatrixForContainer);
-        //lamp
-        int lampdraw = 3;
-        float dist = 0.7;
-        while (lampdraw--)
-        {
-            modelMatrixForContainer = glm::mat4(1.0f);
-            modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(46.0f, 6.0f, dist));
-            modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.6f, 0.6f, 0.6f));
-            //conetex.drawCone(lightingShaderWithTexture, lamp_tex, modelMatrixForContainer);
-            dist += 11.0;
-        }
+      
  
         int round_table_count = 3;
         float round_table_distance = 2.0,just=2.0,hey=2.0f;
-        while (round_table_count--)
-    {
-        modelMatrixForContainer = glm::mat4(1.0f);
-        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(46.0f, 1.5f, round_table_distance));
-        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(2.0f, 0.1f, 2.0f));
-        disctex_2.drawCylinder(lightingShaderWithTexture, round_table_tex, modelMatrixForContainer);
-        round_table_distance += 10.0f;
+    //    while (round_table_count--)
+    //{
+    //    modelMatrixForContainer = glm::mat4(1.0f);
+    //    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(46.0f, 1.5f, round_table_distance));
+    //    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(2.0f, 0.1f, 2.0f));
+    //    disctex_2.drawCylinder(lightingShaderWithTexture, round_table_tex, modelMatrixForContainer);
+    //    round_table_distance += 10.0f;
 
-        modelMatrixForContainer = glm::mat4(1.0f);
-        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(46.0f, 0.5f, just));
-        modelMatrixForContainer = glm::rotate(modelMatrixForContainer, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(1.0f, 0.2f, 0.2f));
-        cylindertex.drawCylinder(lightingShaderWithTexture, wood_strip_tex, modelMatrixForContainer);
-        just += 10.0f;
+    //    modelMatrixForContainer = glm::mat4(1.0f);
+    //    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(46.0f, 0.5f, just));
+    //    modelMatrixForContainer = glm::rotate(modelMatrixForContainer, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    //    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(1.0f, 0.2f, 0.2f));
+    //    cylindertex.drawCylinder(lightingShaderWithTexture, wood_strip_tex, modelMatrixForContainer);
+    //    just += 10.0f;
 
-        glm::mat4 circle1 = glm::mat4(1.0f);
-        circle1 = glm::translate(circle1, glm::vec3(46.0f, -0.2f, hey));
-        circle1 = glm::rotate(circle1, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-        circle1 = glm::scale(circle1, glm::vec3(0.05f, 1.0f, 1.0f));
-        hey += 10.0f;
-        //cylindertex.drawCylinder(lightingShaderWithTexture, cud, circle1);
-        //disctex_2.drawCylinder(lightingShaderWithTexture, wood_strip_tex, circle1);
-        cylinder.drawCylinder(lightingShader, circle1);
-    }
+    //    glm::mat4 circle1 = glm::mat4(1.0f);
+    //    circle1 = glm::translate(circle1, glm::vec3(46.0f, -0.2f, hey));
+    //    circle1 = glm::rotate(circle1, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    //    circle1 = glm::scale(circle1, glm::vec3(0.05f, 1.0f, 1.0f));
+    //    hey += 10.0f;
+    //    //cylindertex.drawCylinder(lightingShaderWithTexture, cud, circle1);
+    //    //disctex_2.drawCylinder(lightingShaderWithTexture, wood_strip_tex, circle1);
+    //    cylinder.drawCylinder(lightingShader, circle1);
+    //}
     //round table seat
         int round_table_seat_count = 6;
-        hey = -0.1;
-        while (round_table_seat_count--)
-    {
-        glm::mat4 circle1 = glm::mat4(1.0f);
-        circle1 = glm::translate(circle1, glm::vec3(46.0f, 1.0f, hey));
-        circle1 = glm::rotate(circle1, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-        circle1 = glm::scale(circle1, glm::vec3(0.05f, 1.0f, 1.0f));
+    //    hey = -0.1;
+    //    while (round_table_seat_count--)
+    //{
+    //    glm::mat4 circle1 = glm::mat4(1.0f);
+    //    circle1 = glm::translate(circle1, glm::vec3(46.0f, 1.0f, hey));
+    //    circle1 = glm::rotate(circle1, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    //    circle1 = glm::scale(circle1, glm::vec3(0.05f, 1.0f, 1.0f));
 
-        cylinder.drawCylinder(lightingShader, circle1);
+    //    cylinder.drawCylinder(lightingShader, circle1);
 
-        modelMatrixForContainer = glm::mat4(1.0f);
-        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(45.2f, -0.4, hey));
-        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.2, 1.4, 0.2));
-        chair.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    //    modelMatrixForContainer = glm::mat4(1.0f);
+    //    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(45.2f, -0.4, hey));
+    //    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.2, 1.4, 0.2));
+    //    chair.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
 
-        modelMatrixForContainer = glm::mat4(1.0f);
-        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(46.5f, -0.4, hey));
-        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.2, 1.4, 0.2));
-        chair.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
-        hey += 5.0f;
-    }
-    
+    //    modelMatrixForContainer = glm::mat4(1.0f);
+    //    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(46.5f, -0.4, hey));
+    //    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.2, 1.4, 0.2));
+    //    chair.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    //    hey += 5.0f;
+    //}
+    //
     //round table right side
     round_table_count = 3;
     round_table_distance = -35.0, just = -35.0, hey = -35.0f;
@@ -1290,7 +1476,7 @@ int main()
     modelMatrixForContainer = glm::mat4(1.0f);
     modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(46.0, 2.0, 35.0));
     modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(5.0, 0.5, 28.0));
-    long_table_cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    //long_table_cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
 
     //long table cross stands
     float bab = 37.0f;
@@ -1314,7 +1500,7 @@ int main()
     modelMatrixForContainer = glm::mat4(1.0f);
     modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(23.0, 2.0, 35.0));
     modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(5.0, 0.5, 28.0));
-    long_table_cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    //long_table_cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
     bab = 37.0f;
     gg = 4;
     //long table cross stands
@@ -1450,7 +1636,7 @@ int main()
     modelMatrixForContainer = glm::mat4(1.0f);
     modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(21.0, -0.8, 34.0));
     modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.1, 10.0, 31.0));
-    cash_left_wall.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    //cash_left_wall.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
     //left wall-round table-OUTside)
     modelMatrixForContainer = glm::mat4(1.0f);
     modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(52.5, -0.8, -5.0));
@@ -1476,22 +1662,22 @@ int main()
     modelMatrixForContainer = glm::mat4(1.0f);
     modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(5.5, -0.8, 66.0));
     modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(7.9, 1.0, 1.5));
-    room_left_wall.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    //room_left_wall.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
     //left wall-round table-INSIde1)
     modelMatrixForContainer = glm::mat4(1.0f);
     modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(52.0, -0.8, -5.0));
     modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.5, 10.0, 40.0));
-    room_left_wall_inside1.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    //room_left_wall_inside1.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
     //left wall-round table-INside2)
     modelMatrixForContainer = glm::mat4(1.0f);
     modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(52.0, -0.8, 35.0));
     modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.5, 10.0, 30.0));
-    room_left_wall_inside2.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    //room_left_wall_inside2.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
     //mid wall in study section
     modelMatrixForContainer = glm::mat4(1.0f);
     modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(20.0, -0.8, 65.0));
     modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(32.0, 10.0, 0.5));
-    room_mid_wall_study.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    //room_mid_wall_study.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
     ///////////////////////////////////
     // 
     
@@ -1565,54 +1751,54 @@ int main()
     //modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(3.0f, 2.0f, 0.2f));
     //oven.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
     // cash booth behind wall
-    modelMatrixForContainer = glm::mat4(1.0f);
-    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-4.0, -0.8, 33.5));
-    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(20.6, 10.0, 0.6));
-    cash_wall.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
-    //cash counter
-    modelMatrixForContainer = glm::mat4(1.0f);
-    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(3.0, 0.2, 21.2));
-    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(8.0f, 3.0f, 3.0f));
-    room_mid_wall_study.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    //modelMatrixForContainer = glm::mat4(1.0f);
+    //modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-4.0, -0.8, 33.5));
+    //modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(20.6, 10.0, 0.6));
+    //cash_wall.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    ////cash counter
+    //modelMatrixForContainer = glm::mat4(1.0f);
+    //modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(3.0, 0.2, 21.2));
+    //modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(8.0f, 3.0f, 3.0f));
+    //room_mid_wall_study.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
 
-    modelMatrixForContainer = glm::mat4(1.0f);
-    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(12.0, 0.2, 21.6));
-    modelMatrixForContainer = glm::rotate(modelMatrixForContainer, glm::radians(-48.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(8.0f, 3.0f, 3.5f));
-    room_mid_wall_study.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
-    
-    modelMatrixForContainer = glm::mat4(1.0f);
-    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-4.6, 0.2, 28.6));
-    modelMatrixForContainer = glm::rotate(modelMatrixForContainer, glm::radians(48.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(10.0f, 3.0f, 3.5f));
+    //modelMatrixForContainer = glm::mat4(1.0f);
+    //modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(12.0, 0.2, 21.6));
+    //modelMatrixForContainer = glm::rotate(modelMatrixForContainer, glm::radians(-48.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    //modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(8.0f, 3.0f, 3.5f));
+    //room_mid_wall_study.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    //
+    //modelMatrixForContainer = glm::mat4(1.0f);
+    //modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-4.6, 0.2, 28.6));
+    //modelMatrixForContainer = glm::rotate(modelMatrixForContainer, glm::radians(48.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    //modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(10.0f, 3.0f, 3.5f));
 
-    room_mid_wall_study.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    //room_mid_wall_study.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
 
-    gg = 3;
-    bab = 0.0;
-    float bab2 = -2.1;
-    while (gg--)
-    {
-        // menu stick
-        modelMatrixForContainer = glm::mat4(1.0f);
-        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(bab, 7.0, 21.6));
-        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.2, 2.0, 0.2));
-        chair.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
-        //menu
-        modelMatrixForContainer = glm::mat4(1.0f);
-        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(bab2, 4.8, 21.2));
-        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(3.0f, 3.0f, 0.3f));
-        menu.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
-        
-        bab += 5.0;
-        bab2 += 5.0;
-    }
-    
-    //counter food rack
-    modelMatrixForContainer = glm::mat4(1.0f);
-    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(0.0, 5.5, 32.0));
-    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(14.0f, 3.5f, 1.5f));
-    wood.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    //gg = 3;
+    //bab = 0.0;
+    //float bab2 = -2.1;
+    //while (gg--)
+    //{
+    //    // menu stick
+    //    modelMatrixForContainer = glm::mat4(1.0f);
+    //    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(bab, 7.0, 21.6));
+    //    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.2, 2.0, 0.2));
+    //    chair.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    //    //menu
+    //    modelMatrixForContainer = glm::mat4(1.0f);
+    //    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(bab2, 4.8, 21.2));
+    //    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(3.0f, 3.0f, 0.3f));
+    //    menu.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    //    
+    //    bab += 5.0;
+    //    bab2 += 5.0;
+    //}
+    //
+    ////counter food rack
+    //modelMatrixForContainer = glm::mat4(1.0f);
+    //modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(0.0, 5.5, 32.0));
+    //modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(14.0f, 3.5f, 1.5f));
+    //wood.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
 
     gg = 4;
     bab = 0.0;
@@ -1630,59 +1816,59 @@ int main()
     
     
     //sofa seat
-    modelMatrixForContainer = glm::mat4(1.0f);
-    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(20.0, 0.1, 11.2));
-    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(4.0f, 1.2f, 4.0f));
-    sofa_seat.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
-    //sofa back 1
-    modelMatrixForContainer = glm::mat4(1.0f);
-    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(20.0, 1.4, 14.2));
-    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(4.0f, 2.2f, 1.0f));
-    sofa_seat.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
-    /*modelMatrixForContainer = glm::mat4(1.0f);
-        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-21.6, -0.3, dist_seat));
-        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.5, 0.4, 0.5));
-        chair.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);*/
-    //sofa leg 1
-    modelMatrixForContainer = glm::mat4(1.0f);
-    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(20.0, -0.8, 11.2));
-    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.5f, 1.0f, 0.5f));
-    sofa_seat.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
-    //sofa 2
-    modelMatrixForContainer = glm::mat4(1.0f);
-    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(30.0, 0.2, 5.0));
-    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(4.0f, 1.2f, 4.0f));
-    sofa_seat.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
-    //sofa back 2
-    modelMatrixForContainer = glm::mat4(1.0f);
-    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(33.0, 1.4, 5.0));
-    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(1.0f, 2.2f, 4.0f));
-    sofa_seat.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
-    //sofa 3
-    modelMatrixForContainer = glm::mat4(1.0f);
-    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(20.0, 0.2, -0.5));
-    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(4.0f, 1.2f, 4.0f));
-    sofa_seat.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
-    //back 3
-    modelMatrixForContainer = glm::mat4(1.0f);
-    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(20.0, 1.4, -0.6));
-    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(4.0f, 2.2f, 1.0f));
-    sofa_seat.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
-    //sofa 4
-    modelMatrixForContainer = glm::mat4(1.0f);
-    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(11.0, 0.2, 5.0));
-    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(4.0f, 1.2f, 4.0f));
-    sofa_seat.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
-    //back 4
-    modelMatrixForContainer = glm::mat4(1.0f);
-    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(11.0, 1.4, 5.0));
-    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(1.0f, 2.2f, 4.0f));
-    sofa_seat.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
-    //between sofa table
-    modelMatrixForContainer = glm::mat4(1.0f);
-    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(18.0, -0.6, 5.2));
-    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(8.0f, 1.4f, 3.5f));
-    sofa_table.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    //modelMatrixForContainer = glm::mat4(1.0f);
+    //modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(20.0, 0.1, 11.2));
+    //modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(4.0f, 1.2f, 4.0f));
+    //sofa_seat.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    ////sofa back 1
+    //modelMatrixForContainer = glm::mat4(1.0f);
+    //modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(20.0, 1.4, 14.2));
+    //modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(4.0f, 2.2f, 1.0f));
+    //sofa_seat.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    ///*modelMatrixForContainer = glm::mat4(1.0f);
+    //    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-21.6, -0.3, dist_seat));
+    //    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.5, 0.4, 0.5));
+    //    chair.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);*/
+    ////sofa leg 1
+    //modelMatrixForContainer = glm::mat4(1.0f);
+    //modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(20.0, -0.8, 11.2));
+    //modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.5f, 1.0f, 0.5f));
+    //sofa_seat.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    ////sofa 2
+    //modelMatrixForContainer = glm::mat4(1.0f);
+    //modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(30.0, 0.2, 5.0));
+    //modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(4.0f, 1.2f, 4.0f));
+    //sofa_seat.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    ////sofa back 2
+    //modelMatrixForContainer = glm::mat4(1.0f);
+    //modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(33.0, 1.4, 5.0));
+    //modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(1.0f, 2.2f, 4.0f));
+    //sofa_seat.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    ////sofa 3
+    //modelMatrixForContainer = glm::mat4(1.0f);
+    //modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(20.0, 0.2, -0.5));
+    //modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(4.0f, 1.2f, 4.0f));
+    //sofa_seat.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    ////back 3
+    //modelMatrixForContainer = glm::mat4(1.0f);
+    //modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(20.0, 1.4, -0.6));
+    //modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(4.0f, 2.2f, 1.0f));
+    //sofa_seat.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    ////sofa 4
+    //modelMatrixForContainer = glm::mat4(1.0f);
+    //modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(11.0, 0.2, 5.0));
+    //modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(4.0f, 1.2f, 4.0f));
+    //sofa_seat.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    ////back 4
+    //modelMatrixForContainer = glm::mat4(1.0f);
+    //modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(11.0, 1.4, 5.0));
+    //modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(1.0f, 2.2f, 4.0f));
+    //sofa_seat.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    ////between sofa table
+    //modelMatrixForContainer = glm::mat4(1.0f);
+    //modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(18.0, -0.6, 5.2));
+    //modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(8.0f, 1.4f, 3.5f));
+    //sofa_table.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
     //main table
     //table board
    /* scale = glm::scale(identityMatrix, glm::vec3(8.0f, 1.4f, 3.5f));
@@ -2005,18 +2191,7 @@ void frontWall(unsigned int& cubeVAO, Shader& lightingShader, Cylinder& cylinder
     model = translate * scale;
     drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
 
-    //cross
-    model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(10.0f, 2.0f, 1.0f));
-    model = glm::rotate(model, glm::radians(30.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-    model = glm::scale(model, glm::vec3(0.2f, 10.0f, 0.2f));
-    drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
-
-    model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(5.0f, 2.0f, 1.0f));
-    model = glm::rotate(model, glm::radians(-30.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-    model = glm::scale(model, glm::vec3(0.2f, 10.0f, 0.2f));
-    drawCube(cubeVAO, lightingShader, model, 0.212, 0.067, 0.031, 32.0);
+    
 
     //table
     scale = glm::scale(identityMatrix, glm::vec3(2.0, 1.2, 2.0));
