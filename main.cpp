@@ -8,6 +8,7 @@
 #include "shader.h"
 #include "camera.h"
 #include "basic_camera.h"
+#include "BezierCurve.h"
 #include "pointLight.h"
 #include "SpotLight.h"
 #include "sphere.h"
@@ -33,7 +34,9 @@ void rightWall(unsigned int& cubeVAO, Shader& lightingShader, CutCone& cone, Cyl
 //void diffuse_on_off(Shader& lightingShader);
 //void specular_on_off(Shader& lightingShader);
 unsigned int loadTexture(char const* path, GLenum textureWrappingModeS, GLenum textureWrappingModeT, GLenum textureFilteringModeMin, GLenum textureFilteringModeMax);
-
+void Glass_window_2(unsigned int TransparentVAO, Shader transparentShader, float x_shift, float y_shift, float z_shift, float rot,float angle, float length, float H);
+void GenSheet_Transparent(unsigned int VAO, Shader ourShader, float len, float width, float height, float local_x, float local_y, float local_z, float rot_x, float rot_y, float rot_z, float trans_x, float trans_y, float trans_z, float x_shift, float y_shift, float z_shift, glm::vec4 color, unsigned int texture,float angle);
+void load_texture(unsigned int& texture, string image_name, GLenum format);
 
 void drawSphere(Shader& shader, glm::mat4 model, float r, float g, float b);
 
@@ -51,9 +54,20 @@ glm::mat4 myPerspective(float fov, float aspect, float near, float far) {
     return result;
 }
 
+bool isFreezeOpen = false;
+bool isOpening = true;
+float freezeThreshold = 95.0f;
+float freezeStep = 1.0f;
+float FreezeAngle = 0.0f;
+
+float keyCooldown = 0.2f;
+
+bool isLiftDoorOpenDown = false;
+float liftDoorPositionDown = 0.0f;
+
 // settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+const unsigned int SCR_WIDTH = 1500;
+const unsigned int SCR_HEIGHT = 800;
 
 // Time management
 double lastKeyPressTime = 0.0;
@@ -75,7 +89,7 @@ float scale_Z = 1.0;
 float moveZ = 0.0;
 // camera
 //Camera camera(glm::vec3(0.0f, 1.1f, -5.2f));
-Camera camera(glm::vec3(20.0f, 14.1f, -32.2f));
+Camera camera(glm::vec3(10.0f, 14.1f, 22.2f));
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -170,6 +184,15 @@ SpotLight spotlight1(
     glm::cos(glm::radians(25.0f)),
     0, -1, 0
 );
+//glass
+//win_1_1
+float rotateAxis_Y_win_2_1 = 0.0;
+
+unsigned int texture0, glass, glass2, hanging_plant, clock_bg, fountain_tex, collapsible_gate;
+glm::vec4 off_white = glm::vec4(0.9098039215686274, 0.8549019607843137, 0.8, 1.0f);
+
+
+
 
 // light settings
 bool pointLightOn = true;
@@ -254,9 +277,47 @@ int main()
     //Shader lightingShader("vertexShaderForGouraudShading.vs", "fragmentShaderForGouraudShading.fs");
     Shader ourShader("vertexShader.vs", "fragmentShader.fs");
     Shader lightingShaderWithTexture("vertexShaderForPhongShadingWithTexture.vs", "fragmentShaderForPhongShadingWithTexture.fs");
+    Shader TransparentShader("vertexShaderForBlending.vs", "fragmentShaderForBlending.fs");
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
 
+    float transparentVertices[] = {
+        // positions         // texture Coords (swapped y coordinates because texture is flipped upside down)
+         0.0f,  1.0f,  0.0f,  0.0f,  0.0f,
+        0.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+        1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+
+        0.0f,  1.0f,  0.0f,  0.0f,  0.0f,
+        1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+        1.0f,  1.0f,  0.0f,  1.0f,  0.0f
+    };
+
+    // transparent VAO
+    unsigned int transparentVAO, transparentVBO;
+    glGenVertexArrays(1, &transparentVAO);
+    glGenBuffers(1, &transparentVBO);
+    glBindVertexArray(transparentVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, transparentVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(transparentVertices), transparentVertices, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glBindVertexArray(0);
+    
+    int width, height, nrChannels;
+    stbi_set_flip_vertically_on_load(true);
+    unsigned char* data = stbi_load("transparent.png", &width, &height, &nrChannels, 0);
+    if (data)
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+        cout << "Failed to load texture 0" << endl;
+    }
+    stbi_image_free(data);
 
     float cube_vertices[] = {
         // positions      // normals
@@ -342,6 +403,21 @@ int main()
     // note that we update the lamp's position attribute's stride to b reflect the updated buffer data
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+
+    //Bezier Curve Control Points
+    GLfloat cp_cup[] =
+    {
+    -0.85, 1.54, 0.0,
+    -0.79, 0.965, 0.0,
+    -0.605, 0.455, 0.0,
+    -0.265, 0.345, 0.0,
+    -0.0, 0.34, 0.0
+
+    };
+
+
+
+
 
     string laughEmoPath = "football.jpg";
     unsigned int laughEmoji = loadTexture(laughEmoPath.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
@@ -431,6 +507,22 @@ int main()
     string cdc = "pattern3.jpg";
     unsigned int chai = loadTexture(cdc.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
     Cube chair = Cube(chai, chai, 32.0f, 0.0f, 0.0f, 1.0f, 1.0f);
+
+    string cdxc = "wood.jpg";
+    unsigned int chaiwood = loadTexture(cdxc.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    Cube wood = Cube(chaiwood, chaiwood, 32.0f, 0.0f, 0.0f, 1.0f, 1.0f);
+
+    string cdsf = "steel.jpg";
+    unsigned int rackwood = loadTexture(cdsf.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    Cube steel = Cube(rackwood, rackwood, 32.0f, 0.0f, 0.0f, 1.0f, 1.0f);
+
+    string ciosf = "freeze.png";
+    unsigned int rackwood_fr = loadTexture(ciosf.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    Cube freeze = Cube(rackwood_fr, rackwood_fr, 32.0f, 0.0f, 0.0f, 1.0f, 1.0f);
+
+    string cposf = "oven.png";
+    unsigned int rackwood_ove = loadTexture(cposf.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    Cube oven = Cube(rackwood_ove, rackwood_ove, 32.0f, 0.0f, 0.0f, 1.0f, 1.0f);
     //food
     string casc = "food.jpg";
     unsigned int zfud = loadTexture(casc.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
@@ -449,6 +541,7 @@ int main()
     string woodStripe = "wood_stripe.jpg";
     unsigned int wood_strip_tex = loadTexture(woodStripe.c_str(), GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
     
+    load_texture(glass, "glass-png-3.png", GL_RGBA);//used
     
     // Cube cube = Cube(coffepic, coffepic, 32.0f, 0.0f, 0.0f, 1.0f, 1.0f);
 
@@ -464,6 +557,10 @@ int main()
     Cone cone = Cone();
     CutCone cutcone = CutCone();
     HemiSphere hemisphere = HemiSphere();
+
+    BezierCurve cup = BezierCurve(cp_cup, 5 * 3, lamp_tex);
+
+    TorusTex cup_handle = TorusTex(2, 5.0, 1.0);
 
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
@@ -490,6 +587,27 @@ int main()
         // ------
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
+        //key functionality
+        float currentTime_2 = glfwGetTime();
+        if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS && currentTime_2 - lastKeyPressTime > keyCooldown) {
+            lastKeyPressTime = currentTime_2; // Update the last key press time
+            if (!isFreezeOpen) {
+                isFreezeOpen = true;         // Activate the door
+                isOpening = (FreezeAngle == 0.0f); // Determine if it should open or close
+            }
+            else {
+                isOpening = !isOpening;      // Toggle between opening and closing
+            }
+        }
+
+        if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS && currentTime_2 - lastKeyPressTime > keyCooldown) {
+            lastKeyPressTime = currentTime_2; // Update the last key press time
+
+            isLiftDoorOpenDown = !isLiftDoorOpenDown; // Toggle the swing state
+        }
+
 
         // be sure to activate shader when setting uniforms/drawing objects
         lightingShader.use();
@@ -581,14 +699,15 @@ int main()
 
         // we now draw as many light bulbs as we have point lights.
         glBindVertexArray(lightCubeVAO);
-        for (unsigned int i = 0; i < 2; i++)
+        for (unsigned int i = 0; i < 5; i++)
         {
             model = glm::mat4(1.0f);
             model = glm::translate(model, pointLightPositions[i]);
-            model = glm::scale(model, glm::vec3(0.2f)); // Make it a smaller cube
+            model = glm::scale(model, glm::vec3(0.6f)); // Make it a smaller cube
             ourShader.setMat4("model", model);
             ourShader.setVec3("color", glm::vec3(0.8f, 0.8f, 0.8f));
-            cone.drawCone(lightingShader, model);
+            //cone.drawCone(lightingShader, model);
+            conetex.drawCone(lightingShaderWithTexture, lamp_tex, model);
             //glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
             //glDrawArrays(GL_TRIANGLES, 0, 36);
         }
@@ -611,7 +730,7 @@ int main()
         pointlight5.setUpPointLight(lightingShaderWithTexture);
 
         lightingShaderWithTexture.setVec3("directionalLight.directiaon", 0.5f, -3.0f, -3.0f);
-        lightingShaderWithTexture.setVec3("directionalLight.ambient", 0.2f, 0.2f, 0.2f);
+        lightingShaderWithTexture.setVec3("directionalLight.ambient", 0.5f, 0.5f, 0.5f);
         lightingShaderWithTexture.setVec3("directionalLight.diffuse", .8f, .8f, .8f);
         lightingShaderWithTexture.setVec3("directionalLight.specular", 1.0f, 1.0f, 1.0f);
 
@@ -680,6 +799,21 @@ int main()
         //cylindertex.drawCylinder(lightingShaderWithTexture, laughEmoji, modelMatrixForContainer);
         //conetex.drawCone(lightingShaderWithTexture, laughEmoji, modelMatrixForContainer);
 
+        //Bezier Curve with texture
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(0.0f, 0.0f, 0.0f));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(10.5f, 10.5f, 10.5f));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.5f, 0.5f, 0.5f));
+        cup.drawBezierCurve(lightingShaderWithTexture, modelMatrixForContainer);
+
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(7.0f, 13.0f, 0.0f));
+        modelMatrixForContainer = glm::rotate(modelMatrixForContainer, glm::radians(-100.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.8f, 0.8f,0.8f));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.5f, 0.5f, 0.5f));
+        cup_handle.drawTorus(lightingShaderWithTexture, lamp_tex,modelMatrixForContainer);
+
+
 
         //sitting phot booth
         modelMatrixForContainer = glm::mat4(1.0f);
@@ -696,13 +830,13 @@ int main()
             modelMatrixForContainer = glm::mat4(1.0f);
             modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(46.0f, 6.0f, dist));
             modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.6f, 0.6f, 0.6f));
-            conetex.drawCone(lightingShaderWithTexture, lamp_tex, modelMatrixForContainer);
+            //conetex.drawCone(lightingShaderWithTexture, lamp_tex, modelMatrixForContainer);
             dist += 11.0;
         }
  
-    int round_table_count = 3;
-    float round_table_distance = 2.0,just=2.0,hey=2.0f;
-    while (round_table_count--)
+        int round_table_count = 3;
+        float round_table_distance = 2.0,just=2.0,hey=2.0f;
+        while (round_table_count--)
     {
         modelMatrixForContainer = glm::mat4(1.0f);
         modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(46.0f, 1.5f, round_table_distance));
@@ -727,9 +861,9 @@ int main()
         cylinder.drawCylinder(lightingShader, circle1);
     }
     //round table seat
-    int round_table_seat_count = 6;
-    hey = -0.1;
-    while (round_table_seat_count--)
+        int round_table_seat_count = 6;
+        hey = -0.1;
+        while (round_table_seat_count--)
     {
         glm::mat4 circle1 = glm::mat4(1.0f);
         circle1 = glm::translate(circle1, glm::vec3(46.0f, 1.0f, hey));
@@ -1021,8 +1155,23 @@ int main()
 
     //back wall-round table-OUTside)
     modelMatrixForContainer = glm::mat4(1.0f);
-    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-10.0, -0.8, 67.0));
-    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(62.0, 10.0, 1.5));
+    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(13.5, -0.8, 66.0));
+    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(38.5, 10.0, 1.5));
+    room_left_wall.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    //2nd portion
+    modelMatrixForContainer = glm::mat4(1.0f);
+    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-50.0, -0.8, 66.0));
+    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(55.5, 10.0, 1.5));
+    room_left_wall.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    //window up 
+    modelMatrixForContainer = glm::mat4(1.0f);
+    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(5.5, 8.0, 66.0));
+    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(7.9, 1.0, 1.5));
+    room_left_wall.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    //window down
+    modelMatrixForContainer = glm::mat4(1.0f);
+    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(5.5, -0.8, 66.0));
+    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(7.9, 1.0, 1.5));
     room_left_wall.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
     //left wall-round table-INSIde1)
     modelMatrixForContainer = glm::mat4(1.0f);
@@ -1041,94 +1190,140 @@ int main()
     room_mid_wall_study.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
     ///////////////////////////////////
     // 
+    
+    //kitchen right wall
+    //modelMatrixForContainer = glm::mat4(1.0f);
+    //modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-4.0, -0.8, 33.5));
+    //modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.1, 10.0, 30.0));
+    //cash_left_wall.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    ////kitchen door
+    //modelMatrixForContainer = glm::mat4(1.0f);
+    //modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(16.6, -0.8, 33.5));
+    //modelMatrixForContainer = glm::rotate(modelMatrixForContainer, glm::radians(-FreezeAngle), glm::vec3(0.0, 1.0, 0.0));
+    //modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(4.4, 10.0, 0.1));
+    //wood.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+
+    ////kitchen below
+    //modelMatrixForContainer = glm::mat4(1.0f);
+    //modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-3.9, 0.0, 47.0));
+    //modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(3.0f, 3.5f, 18.0f));
+    //stair.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+
+    //modelMatrixForContainer = glm::mat4(1.0f);
+    //modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-1.0, 0.0, 62.0));
+    //modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(10.0f, 3.5f, 3.0f));
+    //stair.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+
+    //gg = 4;
+    //float okkx = 49.0;
+    //while (gg--)
+    //{
+    //    modelMatrixForContainer = glm::mat4(1.0f);
+    //    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-1.0, 0.0, okkx));
+    //    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.4f, 3.5f, 0.2f));
+    //    chair.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    //    okkx += 4.0;
+    //}
+    //gg = 4;
+    //okkx = 1.0;
+    //while (gg--)
+    //{
+    //    modelMatrixForContainer = glm::mat4(1.0f);
+    //    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(okkx, 0.0, 61.5));
+    //    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.4f, 3.5f, 0.2f));
+    //    chair.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    //    okkx += 2.0;
+    //}
+    ////fridge
+    //modelMatrixForContainer = glm::mat4(1.0f);
+    //modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-3.7, 0.0, 40.0));
+    //modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(3.0f, 5.0f, 4.0f));
+    //steel.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    //modelMatrixForContainer = glm::mat4(1.0f);
+    //modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-0.5, 0.0, 40.0));
+    //modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.2f, 5.0f, 4.0f));
+    //freeze.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+
+    ////oven rack
+    //modelMatrixForContainer = glm::mat4(1.0f);
+    //modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(13.0, 0.0, 61.0));
+    //modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(5.0f, 4.0f, 4.5f));
+    //wood.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+
+    ////oven
+    //modelMatrixForContainer = glm::mat4(1.0f);
+    //modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(13.5, 4.5, 61.0));
+    //modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(3.0f, 2.0f, 2.0f));
+    //steel.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+
+    //modelMatrixForContainer = glm::mat4(1.0f);
+    //modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(13.5, 4.5, 60.8));
+    //modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(3.0f, 2.0f, 0.2f));
+    //oven.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
     // cash booth behind wall
     modelMatrixForContainer = glm::mat4(1.0f);
     modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-4.0, -0.8, 33.5));
-    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(20.0, 10.0, 0.6));
+    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(20.6, 10.0, 0.6));
     cash_wall.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
-    //kitchen right wall
-    modelMatrixForContainer = glm::mat4(1.0f);
-    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-4.0, -0.8, 33.5));
-    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.1, 10.0, 30.0));
-    cash_left_wall.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
-
     //cash counter
     modelMatrixForContainer = glm::mat4(1.0f);
     modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(3.0, 0.2, 21.2));
-    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(8.0f, 4.0f, 3.0f));
+    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(8.0f, 3.0f, 3.0f));
     room_mid_wall_study.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
 
     modelMatrixForContainer = glm::mat4(1.0f);
     modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(12.0, 0.2, 21.6));
     modelMatrixForContainer = glm::rotate(modelMatrixForContainer, glm::radians(-48.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(8.0f, 4.0f, 3.5f));
-   
+    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(8.0f, 3.0f, 3.5f));
     room_mid_wall_study.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
     
     modelMatrixForContainer = glm::mat4(1.0f);
     modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-4.6, 0.2, 28.6));
     modelMatrixForContainer = glm::rotate(modelMatrixForContainer, glm::radians(48.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(10.0f, 4.0f, 3.5f));
+    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(10.0f, 3.0f, 3.5f));
 
     room_mid_wall_study.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
 
-    //menu
-    modelMatrixForContainer = glm::mat4(1.0f);
-    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(5.0, 5.2, 21.2));
-    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(3.0f, 3.0f, 0.3f));
-   // menu.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
-
-    modelMatrixForContainer = glm::mat4(1.0f);
-    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(10.0, 5.5, 21.2));
-    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(3.0f, 3.0f, 0.3f));
-    //modelMatrixForContainer = glm::rotate(modelMatrixForContainer, glm::radians(-48.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    //menu.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
-
-    modelMatrixForContainer = glm::mat4(1.0f);
-    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(0.0, 5.5, 21.2));
-    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(3.0f, 3.0f, 0.3f));
-    //modelMatrixForContainer = glm::rotate(modelMatrixForContainer, glm::radians(48.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    //menu.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    gg = 3;
+    bab = 0.0;
+    float bab2 = -2.1;
+    while (gg--)
+    {
+        // menu stick
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(bab, 7.0, 21.6));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.2, 2.0, 0.2));
+        chair.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+        //menu
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(bab2, 4.8, 21.2));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(3.0f, 3.0f, 0.3f));
+        menu.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+        
+        bab += 5.0;
+        bab2 += 5.0;
+    }
+    
     //counter food rack
     modelMatrixForContainer = glm::mat4(1.0f);
     modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(0.0, 5.5, 32.0));
-    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(10.0f, 3.5f, 1.5f));
-    //long_table_cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(14.0f, 3.5f, 1.5f));
+    wood.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
 
-
-    modelMatrixForContainer = glm::mat4(1.0f);
-    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(0.0, 5.5, 31.5));
-    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(3.5f,3.5f, 0.5f));
-    //food.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    gg = 4;
+    bab = 0.0;
+    while (gg--)
+    {
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(bab, 5.5, 31.5));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(3.5f, 3.5f, 0.5f));
+        food.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+        bab += 3.6;
+    }
+    
 
    
-    //kitchen below
-    modelMatrixForContainer = glm::mat4(1.0f);
-    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-3.9, 0.0, 47.0));
-    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(3.0f, 3.5f, 18.0f));
-    //room_mid_wall_study.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
-
-    modelMatrixForContainer = glm::mat4(1.0f);
-    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-1.0, 0.0, 62.0));
-    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(10.0f, 3.5f, 3.0f));
-    //sofa_seat.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
-
-
-    //fridge
-    modelMatrixForContainer = glm::mat4(1.0f);
-    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-3.7, 0.0, 40.0));
-    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(3.0f,5.0f, 4.0f));
-    //sofa_seat.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
-    //oven rack
-    modelMatrixForContainer = glm::mat4(1.0f);
-    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(13.0, 0.0, 61.0));
-    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(5.0f, 4.0f, 4.5f));
-    //sofa_seat.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
-    //oven
-    modelMatrixForContainer = glm::mat4(1.0f);
-    modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(13.5, 4.5, 61.0));
-    modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(3.0f, 2.0f, 2.0f));
-    //room_mid_wall_study.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+    
     
     //sofa seat
     modelMatrixForContainer = glm::mat4(1.0f);
@@ -1236,6 +1431,81 @@ int main()
     //model = glm::scale(model, glm::vec3(1.2, 1.2, 1.2));
     //model = glm::translate(model, glm::vec3(-31.0, 1.6, 44.0));
     //hemisphere.drawHemiSphere(lightingShader, model);
+
+
+
+
+    TransparentShader.use();
+    //glm::mat4 projection2 = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+    //glm::mat4 view2 = camera.GetViewMatrix();
+    TransparentShader.setMat4("projection", projection);
+    TransparentShader.setMat4("view", view);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    if (isFreezeOpen) {
+        if (isOpening) {
+            if (FreezeAngle < freezeThreshold) {
+                FreezeAngle += freezeStep; // Open the door
+            }
+            else {
+                isFreezeOpen = false;      // Stop when fully opened
+            }
+        }
+        else {
+            if (FreezeAngle > 0.0f) {
+                FreezeAngle -= freezeStep; // Close the door
+            }
+            else {
+                isFreezeOpen = false;      // Stop when fully closed
+            }
+        }
+    }
+    //window 1
+    float x_shift = 5.5;
+    float y_shift = 0.0;
+    float z_shift = -66.5f;
+    Glass_window_2(transparentVAO, TransparentShader, x_shift, y_shift, z_shift, 0.0f, -FreezeAngle,4.0,8);
+    //window 2
+    x_shift = 13.5;
+    y_shift = 0.0;
+    z_shift = -66.5f;
+    Glass_window_2(transparentVAO, TransparentShader, x_shift, y_shift, z_shift, 180.0f, FreezeAngle, 4.0, 8);
+
+    if (isLiftDoorOpenDown)
+    {
+        if (liftDoorPositionDown <= 10.0f)
+        {
+            liftDoorPositionDown += 0.05f;
+        }
+    }
+    else
+    {
+        if (liftDoorPositionDown > 0.01f)
+        {
+            liftDoorPositionDown -= 0.05f;
+        }
+        else
+        {
+            liftDoorPositionDown = 0.0f;
+        }
+    }
+    //sliding door
+    x_shift = -4.0 - liftDoorPositionDown;
+    y_shift = 0.0;
+    z_shift = 6.0f;
+    Glass_window_2(transparentVAO, TransparentShader, x_shift, y_shift, z_shift, 0.0f, 0.0f, 16.0, 9.5);
+    //fixed left
+    x_shift = 12.0;
+    y_shift = 0.0;
+    z_shift = 6.0f;
+   Glass_window_2(transparentVAO, TransparentShader, x_shift, y_shift, z_shift, 0.0f, 0.0f, 40.0, 9.5);
+   //fixed right
+   x_shift = -44.0;
+   y_shift = 0.0;
+   z_shift = 6.0f;
+   Glass_window_2(transparentVAO, TransparentShader, x_shift, y_shift, z_shift, 0.0f, 0.0f, 40.0, 9.5);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
@@ -1947,5 +2217,70 @@ unsigned int loadTexture(char const* path, GLenum textureWrappingModeS, GLenum t
     }
 
     return textureID;
+}
+
+void Glass_window_2(unsigned int TransparentVAO, Shader transparentShader, float x_shift, float y_shift, float z_shift, float rot,float angle,float length, float H)
+{
+    //variable declaration
+    float local_x = 0.0f, local_y = 0.0f, local_z = 0.f;
+    float len = 0.0f, width = 0.0f, height = 0.0f;
+    float  rot_x = 0.0f, rot_y = 0.0f, rot_z = 0.0f;
+    float trans_x = 0.0f, trans_y = 0.0f, trans_z = 0.0f;
+
+    rot_x = 0.0f, rot_y = rot - rotateAxis_Y_win_2_1, rot_z = 0.0f;
+    trans_x = 0.0f, trans_y = 0.0f, trans_z = 0.0f;
+    len = length, width = 1.0f, height = H;
+    local_x = 0.0f, local_y = 0.0f, local_z = 0.0f;
+    GenSheet_Transparent(TransparentVAO, transparentShader, len, width, height, local_x, local_y, local_z, rot_x, rot_y, rot_z, trans_x, trans_y, trans_z, x_shift, y_shift, z_shift, off_white, glass,angle);
+}
+
+void GenSheet_Transparent(unsigned int VAO, Shader ourShader, float len, float width, float height, float local_x, float local_y, float local_z, float rot_x, float rot_y, float rot_z, float trans_x, float trans_y, float trans_z, float x_shift, float y_shift, float z_shift, glm::vec4 color, unsigned int texture, float angle)
+{
+    // Modelling Transformation
+    glm::mat4 identityMatrix = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+    glm::mat4 local_translateMatrix, translateMatrix, rotateXMatrix, rotateYMatrix, rotateZMatrix, scaleMatrix, model, uni_translate, rotateYMatrix_rot;
+    uni_translate = glm::translate(identityMatrix, glm::vec3(x_shift, y_shift, -1.0f * (z_shift)));
+    float x_sft = local_x, y_sft = local_y, z_sft = local_z;
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture);//bindtexture
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, texture);//bindtexture
+    local_translateMatrix = glm::translate(identityMatrix, glm::vec3(x_sft, y_sft, -1.0f * z_sft));
+    translateMatrix = glm::translate(identityMatrix, glm::vec3(trans_x, trans_y, -1.0f * trans_z));
+    scaleMatrix = glm::scale(identityMatrix, glm::vec3(len, height, -1.0 * width));
+    rotateXMatrix = glm::rotate(identityMatrix, glm::radians(0.0f + rot_x), glm::vec3(1.0f, 0.0f, 0.0f));
+    rotateYMatrix_rot = glm::rotate(identityMatrix, glm::radians(0.0f + rot_y), glm::vec3(0.0f, 1.0f, 0.0f));
+    rotateYMatrix = glm::rotate(identityMatrix, glm::radians(angle), glm::vec3(0.0f, 1.0f, 0.0f));
+    rotateZMatrix = glm::rotate(identityMatrix, glm::radians(0.0f + rot_z), glm::vec3(0.0f, 0.0f, 1.0f));
+
+    model = uni_translate * rotateZMatrix * rotateYMatrix_rot * rotateYMatrix * rotateXMatrix * translateMatrix * local_translateMatrix * scaleMatrix;
+    ourShader.setMat4("model", model);
+
+    glBindVertexArray(VAO);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+}
+void load_texture(unsigned int& texture, string image_name, GLenum format)
+{
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    int width, height, nrChannels;
+    stbi_set_flip_vertically_on_load(true);
+    unsigned char* data = stbi_load(image_name.c_str(), &width, &height, &nrChannels, 0);
+    if (data)
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+        cout << "Failed to load texture " << image_name << endl;
+    }
+    stbi_image_free(data);
 }
 

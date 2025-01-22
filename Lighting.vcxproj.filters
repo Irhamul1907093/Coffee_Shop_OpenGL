@@ -50,6 +50,9 @@
     <ClInclude Include="SpotLight.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BezierCurve.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="vertexShader.vs" />
@@ -60,6 +63,8 @@
     <None Include="fragmentShaderForGouraudShading.fs" />
     <None Include="fragmentShaderForPhongShadingWithTexture.fs" />
     <None Include="vertexShaderForPhongShadingWithTexture.vs" />
+    <None Include="fragmentShaderForBlending.fs" />
+    <None Include="vertexShaderForBlending.vs" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="C:\Users\User\Desktop\Lab-4(cg)\emoji.png">

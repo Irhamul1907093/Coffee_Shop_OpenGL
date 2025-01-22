@@ -138,6 +138,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="basic_camera.h" />
+    <ClInclude Include="BezierCurve.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="cube.h" />
     <ClInclude Include="pointLight.h" />
@@ -148,10 +149,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="fragmentShader.fs" />
+    <None Include="fragmentShaderForBlending.fs" />
     <None Include="fragmentShaderForGouraudShading.fs" />
     <None Include="fragmentShaderForPhongShading.fs" />
     <None Include="fragmentShaderForPhongShadingWithTexture.fs" />
     <None Include="vertexShader.vs" />
+    <None Include="vertexShaderForBlending.vs" />
     <None Include="vertexShaderForGouraudShading.vs" />
     <None Include="vertexShaderForPhongShading.vs" />
     <None Include="vertexShaderForPhongShadingWithTexture.vs" />

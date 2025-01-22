@@ -1,0 +1,171 @@
+//win_1_1
+float rotateAxis_Y_win_2_1 = 0.0;
+
+//swing info
+// Global or static variables to track swing state
+bool isSwinging = false;            // Tracks if the swing is active
+float swingVelocity = 0.0f;         // Controls the swing's velocity
+float maxSwingVelocity = 0.08f;      // Maximum velocity for the swing
+float damping = 0.0001f;              // Damping factor to control acceleration/deceleration
+float swingAngleAmplitude = 0.0f;    // Maximum angle of the swing (dynamic based on velocity)
+float maxSwingAngle = 50.0f;
+float currenttime = 0.0f; 
+
+unsigned int texture0, glass,glass2,hanging_plant,clock_bg,fountain_tex, collapsible_gate;
+glm::vec4 off_white = glm::vec4(0.9098039215686274, 0.8549019607843137, 0.8, 1.0f);
+
+bool isLiftDoorOpenDown = false;
+float liftDoorPositionDown = 0.0f;
+
+
+Shader TransparentShader("vertexShaderForBlending.vs", "fragmentShaderForBlending.fs");
+
+    float transparentVertices[] = {
+        // positions         // texture Coords (swapped y coordinates because texture is flipped upside down)
+         0.0f,  1.0f,  0.0f,  0.0f,  0.0f,
+        0.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+        1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+
+        0.0f,  1.0f,  0.0f,  0.0f,  0.0f,
+        1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+        1.0f,  1.0f,  0.0f,  1.0f,  0.0f
+    };
+
+    // transparent VAO
+    unsigned int transparentVAO, transparentVBO;
+    glGenVertexArrays(1, &transparentVAO);
+    glGenBuffers(1, &transparentVBO);
+    glBindVertexArray(transparentVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, transparentVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(transparentVertices), transparentVertices, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glBindVertexArray(0);
+
+
+
+
+
+
+
+int width, height, nrChannels;
+stbi_set_flip_vertically_on_load(true);
+unsigned char* data = stbi_load("transparent.png", &width, &height, &nrChannels, 0);
+if (data)
+{
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    glGenerateMipmap(GL_TEXTURE_2D);
+}
+else
+{
+    cout << "Failed to load texture 0" << endl;
+}
+stbi_image_free(data);
+
+
+void Glass_window_2(unsigned int TransparentVAO, Shader transparentShader, float x_shift, float y_shift, float z_shift, float rot)
+{
+    //variable declaration
+    float local_x = 0.0f, local_y = 0.0f, local_z = 0.f;
+    float len = 0.0f, width = 0.0f, height = 0.0f;
+    float  rot_x = 0.0f, rot_y = 0.0f, rot_z = 0.0f;
+    float trans_x = 0.0f, trans_y = 0.0f, trans_z = 0.0f;
+
+    rot_x = 0.0f, rot_y = rot - rotateAxis_Y_win_2_1, rot_z = 0.0f;
+    trans_x = 0.0f, trans_y = 0.0f, trans_z = 0.0f;
+    len = 3.0f, width = 1.0f, height = 8.0f;
+    local_x = 0.0f, local_y = 0.0f, local_z = 0.0f;
+    GenSheet_Transparent(TransparentVAO, transparentShader, len, width, height, local_x, local_y, local_z, rot_x, rot_y, rot_z, trans_x, trans_y, trans_z, x_shift, y_shift, z_shift, off_white, glass);
+}
+
+
+void GenSheet_Transparent(unsigned int VAO, Shader ourShader, float len, float width, float height, float local_x, float local_y, float local_z, float rot_x, float rot_y, float rot_z, float trans_x, float trans_y, float trans_z, float x_shift, float y_shift, float z_shift, glm::vec4 color, unsigned int texture)
+{
+    // Modelling Transformation
+    glm::mat4 identityMatrix = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+    glm::mat4 local_translateMatrix, translateMatrix, rotateXMatrix, rotateYMatrix, rotateZMatrix, scaleMatrix, model, uni_translate;
+    uni_translate = glm::translate(identityMatrix, glm::vec3(x_shift, y_shift, -1.0f * (z_shift)));
+    float x_sft = local_x, y_sft = local_y, z_sft = local_z;
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture);//bindtexture
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, texture);//bindtexture
+    local_translateMatrix = glm::translate(identityMatrix, glm::vec3(x_sft, y_sft, -1.0f * z_sft));
+    translateMatrix = glm::translate(identityMatrix, glm::vec3(trans_x, trans_y, -1.0f * trans_z));
+    scaleMatrix = glm::scale(identityMatrix, glm::vec3(len, height, -1.0 * width));
+    rotateXMatrix = glm::rotate(identityMatrix, glm::radians(0.0f + rot_x), glm::vec3(1.0f, 0.0f, 0.0f));
+    rotateYMatrix = glm::rotate(identityMatrix, glm::radians(0.0f + rot_y), glm::vec3(0.0f, 1.0f, 0.0f));
+    rotateZMatrix = glm::rotate(identityMatrix, glm::radians(0.0f + rot_z), glm::vec3(0.0f, 0.0f, 1.0f));
+
+    model = uni_translate * rotateZMatrix * rotateYMatrix * rotateXMatrix * translateMatrix * local_translateMatrix * scaleMatrix ;
+    ourShader.setMat4("model", model);
+
+    glBindVertexArray(VAO);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+}
+
+
+
+x_shift = 34.995;
+y_shift = 20.8;
+z_shift = -43.0f;
+Glass_window_2(transparentVAO, TransparentShader, x_shift, y_shift, z_shift, 90.0f);
+
+
+
+void load_texture(unsigned int& texture, string image_name, GLenum format)
+{
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    int width, height, nrChannels;
+    stbi_set_flip_vertically_on_load(true);
+    unsigned char* data = stbi_load(image_name.c_str(), &width, &height, &nrChannels, 0);
+    if (data)
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+        cout << "Failed to load texture " << image_name << endl;
+    }
+    stbi_image_free(data);
+}
+
+
+
+
+
+    load_texture(glass, "glass-png-3.png", GL_RGBA);//used
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
