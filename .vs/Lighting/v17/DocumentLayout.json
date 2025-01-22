@@ -75,9 +75,9 @@
               "Title": "main.cpp",
               "DocumentMoniker": "G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\main.cpp",
               "RelativeDocumentMoniker": "main.cpp",
-              "ToolTip": "G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\main.cpp*",
-              "RelativeToolTip": "main.cpp*",
-              "ViewState": "AgIAAP0CAAAAAAAAAAAQwA4DAABNAAAAAAAAAA==",
+              "ToolTip": "G:\\KUET\\4-2\\Graphics lab\\hw_3_tex\\HW_3\\HW_3\\Lighting Student Version\\main.cpp",
+              "RelativeToolTip": "main.cpp",
+              "ViewState": "AgIAAMgCAAAAAAAAAAAAANkCAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-01-20T19:58:07.775Z",
               "EditorCaption": ""
@@ -92,8 +92,7 @@
               "RelativeToolTip": "sphere.h",
               "ViewState": "AgIAADkHAAAAAAAAAAAAACoHAABBAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-01-20T20:56:11.552Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-20T20:56:11.552Z"
             },
             {
               "$type": "Document",
