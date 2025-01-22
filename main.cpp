@@ -134,6 +134,19 @@ glm::vec3 pointLightPositions[] = {
     //round table right
     glm::vec3(-36.0f, 6.4f, 4.7f),
     glm::vec3(-16.0f, 6.4f, 4.7f),
+    //more 9
+    // name plate 5
+    glm::vec3(42.7f, 14.4f, -6.0f),
+    glm::vec3(22.7f, 14.4f, -5.8f),
+    glm::vec3(0.7f, 14.4f, -5.8f),
+    glm::vec3(-20.7f, 14.4f, -5.8f),
+    glm::vec3(-32.7f, 14.4f, -5.8f),
+
+    //stand 4
+    glm::vec3(48.5, 3.0, -24.0),
+    glm::vec3(48.5, 3.0, -58.0),
+    glm::vec3(-44.0, 3.0, -24.0),
+    glm::vec3(-44.0, 3.0, -58.0)
     //glm::vec3(-1.5f,  -1.5f,  0.0f)
 };
 PointLight pointlight1(
@@ -390,7 +403,106 @@ PointLight pointlight23(
     0.032f, //k_q
     23       // light number
 );
+//more 9
+PointLight pointlight24(
 
+    pointLightPositions[23].x, pointLightPositions[23].y, pointLightPositions[23].z,  // position
+    0.05f, 0.05f, 0.05f,     // ambient
+    0.8f, 0.8f, 0.8f,     // diffuse
+    1.0f, 1.0f, 1.0f,        // specular
+    1.0f,   //k_c
+    0.09f,  //k_l
+    0.032f, //k_q
+    24       // light number
+);
+PointLight pointlight25(
+
+    pointLightPositions[24].x, pointLightPositions[24].y, pointLightPositions[24].z,  // position
+    0.05f, 0.05f, 0.05f,     // ambient
+    0.8f, 0.8f, 0.8f,     // diffuse
+    1.0f, 1.0f, 1.0f,        // specular
+    1.0f,   //k_c
+    0.09f,  //k_l
+    0.032f, //k_q
+    25       // light number
+);
+PointLight pointlight26(
+
+    pointLightPositions[25].x, pointLightPositions[25].y, pointLightPositions[25].z,  // position
+    0.05f, 0.05f, 0.05f,     // ambient
+    0.8f, 0.8f, 0.8f,     // diffuse
+    1.0f, 1.0f, 1.0f,        // specular
+    1.0f,   //k_c
+    0.09f,  //k_l
+    0.032f, //k_q
+    26       // light number
+);
+PointLight pointlight27(
+
+    pointLightPositions[26].x, pointLightPositions[26].y, pointLightPositions[26].z,  // position
+    0.05f, 0.05f, 0.05f,     // ambient
+    0.8f, 0.8f, 0.8f,     // diffuse
+    1.0f, 1.0f, 1.0f,        // specular
+    1.0f,   //k_c
+    0.09f,  //k_l
+    0.032f, //k_q
+    27       // light number
+);
+PointLight pointlight28(
+
+    pointLightPositions[27].x, pointLightPositions[27].y, pointLightPositions[27].z,  // position
+    0.05f, 0.05f, 0.05f,     // ambient
+    0.8f, 0.8f, 0.8f,     // diffuse
+    1.0f, 1.0f, 1.0f,        // specular
+    1.0f,   //k_c
+    0.09f,  //k_l
+    0.032f, //k_q
+    28       // light number
+);
+PointLight pointlight29(
+
+    pointLightPositions[28].x, pointLightPositions[28].y, pointLightPositions[28].z,  // position
+    0.05f, 0.05f, 0.05f,     // ambient
+    0.8f, 0.8f, 0.8f,     // diffuse
+    1.0f, 1.0f, 1.0f,        // specular
+    1.0f,   //k_c
+    0.09f,  //k_l
+    0.032f, //k_q
+    29       // light number
+);
+PointLight pointlight30(
+
+    pointLightPositions[29].x, pointLightPositions[29].y, pointLightPositions[29].z,  // position
+    0.05f, 0.05f, 0.05f,     // ambient
+    0.8f, 0.8f, 0.8f,     // diffuse
+    1.0f, 1.0f, 1.0f,        // specular
+    1.0f,   //k_c
+    0.09f,  //k_l
+    0.032f, //k_q
+    30       // light number
+);
+PointLight pointlight31(
+
+    pointLightPositions[30].x, pointLightPositions[30].y, pointLightPositions[30].z,  // position
+    0.05f, 0.05f, 0.05f,     // ambient
+    0.8f, 0.8f, 0.8f,     // diffuse
+    1.0f, 1.0f, 1.0f,        // specular
+    1.0f,   //k_c
+    0.09f,  //k_l
+    0.032f, //k_q
+    31      // light number
+);
+PointLight pointlight32(
+
+    pointLightPositions[31].x, pointLightPositions[31].y, pointLightPositions[31].z,  // position
+    0.05f, 0.05f, 0.05f,     // ambient
+    0.8f, 0.8f, 0.8f,     // diffuse
+    1.0f, 1.0f, 1.0f,        // specular
+    1.0f,   //k_c
+    0.09f,  //k_l
+    0.032f, //k_q
+    32       // light number
+);
 
 float spotLightXpos = -1.0f, spotLightYpos = 3.7;
 glm::vec3 spotPositions[] = {
@@ -886,6 +998,25 @@ int main()
         pointlight22.setUpPointLight(lightingShader);
         // point light 23
         pointlight23.setUpPointLight(lightingShader);
+        //more 9///////////
+        // point light 24
+        pointlight24.setUpPointLight(lightingShader);
+        // point light 25
+        pointlight25.setUpPointLight(lightingShader);
+        // point light 26
+        pointlight26.setUpPointLight(lightingShader);
+        // point light 27
+        pointlight27.setUpPointLight(lightingShader);
+        // point light 28
+        pointlight28.setUpPointLight(lightingShader);
+        // point light 29
+        pointlight29.setUpPointLight(lightingShader);
+        // point light 30
+        pointlight30.setUpPointLight(lightingShader);
+        // point light 31
+        pointlight31.setUpPointLight(lightingShader);
+        // point light 32
+        pointlight32.setUpPointLight(lightingShader);
 
         lightingShader.setVec3("directionalLight.directiaon", 0.5f, -3.0f, -3.0f);
         lightingShader.setVec3("directionalLight.ambient", .5f, .5f, .5f);
@@ -962,7 +1093,7 @@ int main()
 
         // we now draw as many light bulbs as we have point lights.
         glBindVertexArray(lightCubeVAO);
-        for (unsigned int i = 0; i < 23 ; i++)
+        for (unsigned int i = 0; i < 32 ; i++)
         {
             model = glm::mat4(1.0f);
             model = glm::translate(model, pointLightPositions[i]);
@@ -970,14 +1101,13 @@ int main()
             ourShader.setMat4("model", model);
             ourShader.setVec3("color", glm::vec3(0.8f, 0.8f, 0.8f));
             //cone.drawCone(lightingShader, model);
-            conetex.drawCone(lightingShaderWithTexture, lamp_tex, model);
-            //glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
-            //glDrawArrays(GL_TRIANGLES, 0, 36);
-
-            model = glm::mat4(1.0f);
-            model = glm::translate(model, glm::vec3(pointLightPositions[i].x - 0.05, pointLightPositions[i].y + 1.0f, pointLightPositions[i].z - 0.05));
-            model = glm::scale(model, glm::vec3(0.1f,1.4f,0.1f)); // Make it a smaller cube
-            chair.drawCubeWithTexture(lightingShaderWithTexture, model);
+            if (i < 23) {
+                conetex.drawCone(lightingShaderWithTexture, lamp_tex, model);
+                model = glm::mat4(1.0f);
+                model = glm::translate(model, glm::vec3(pointLightPositions[i].x - 0.05, pointLightPositions[i].y + 1.0f, pointLightPositions[i].z - 0.05));
+                model = glm::scale(model, glm::vec3(0.1f, 1.4f, 0.1f)); // Make it a smaller cube
+                chair.drawCubeWithTexture(lightingShaderWithTexture, model);
+            }     
         }
 
         // be sure to activate shader when setting uniforms/drawing objects
@@ -1033,6 +1163,26 @@ int main()
         pointlight22.setUpPointLight(lightingShaderWithTexture);
         // point light 23
         pointlight23.setUpPointLight(lightingShaderWithTexture);
+        //more 9///////////
+        // point light 24
+        pointlight24.setUpPointLight(lightingShaderWithTexture);
+        // point light 25
+        pointlight25.setUpPointLight(lightingShaderWithTexture);
+        // point light 26
+        pointlight26.setUpPointLight(lightingShaderWithTexture);
+        // point light 27
+        pointlight27.setUpPointLight(lightingShaderWithTexture);
+        // point light 28
+        pointlight28.setUpPointLight(lightingShaderWithTexture);
+        // point light 29
+        pointlight29.setUpPointLight(lightingShaderWithTexture);
+        // point light 30
+        pointlight30.setUpPointLight(lightingShaderWithTexture);
+        // point light 31
+        pointlight31.setUpPointLight(lightingShaderWithTexture);
+        // point light 32
+        pointlight32.setUpPointLight(lightingShaderWithTexture);
+
 
         lightingShaderWithTexture.setVec3("directionalLight.directiaon", 0.5f, -3.0f, -3.0f);
         lightingShaderWithTexture.setVec3("directionalLight.ambient", 0.5f, 0.5f, 0.5f);
@@ -1133,7 +1283,7 @@ int main()
         modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-47.0, 1.0, -22.0));
         modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(1.0f, 1.0f, 1.0f));
         sphere.drawSphere(lightingShaderWithTexture, modelMatrixForContainer);
-
+        
         //stand 4
         modelMatrixForContainer = glm::mat4(1.0f);
         modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-47.0, -10.0, -60.0));
@@ -1159,12 +1309,17 @@ int main()
         
         //sphere with tex
         modelMatrixForContainer = glm::mat4(1.0f);
-        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(11.0f, 1.25f, 2.0f));
-        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(0.5f, 0.5f, 0.5f));
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(26.0, -7.8, -40.0));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(1.0f, 1.0f, 1.0f));
         //cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
         spheretex.drawSphere(lightingShaderWithTexture, laughEmoji, modelMatrixForContainer);
         //cylindertex.drawCylinder(lightingShaderWithTexture, laughEmoji, modelMatrixForContainer);
         //conetex.drawCone(lightingShaderWithTexture, laughEmoji, modelMatrixForContainer);
+        modelMatrixForContainer = glm::mat4(1.0f);
+        modelMatrixForContainer = glm::translate(modelMatrixForContainer, glm::vec3(-27.0, -7.8, -40.0));
+        modelMatrixForContainer = glm::scale(modelMatrixForContainer, glm::vec3(1.0f, 1.0f, 1.0f));
+        //cube.drawCubeWithTexture(lightingShaderWithTexture, modelMatrixForContainer);
+        spheretex.drawSphere(lightingShaderWithTexture, laughEmoji, modelMatrixForContainer);
 
         //Bezier Curve with texture
         modelMatrixForContainer = glm::mat4(1.0f);
@@ -2611,6 +2766,16 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             pointlight21.turnOff();
             pointlight22.turnOff();
             pointlight23.turnOff();
+            //more 9
+            pointlight24.turnOff();
+            pointlight25.turnOff();
+            pointlight26.turnOff();
+            pointlight27.turnOff();
+            pointlight28.turnOff();
+            pointlight29.turnOff();
+            pointlight30.turnOff();
+            pointlight31.turnOff();
+            pointlight32.turnOff();
             pointLightOn = !pointLightOn;
         }
         else
@@ -2639,6 +2804,16 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             pointlight21.turnOn();
             pointlight22.turnOn();
             pointlight23.turnOn();
+            //more 9
+            pointlight24.turnOn();
+            pointlight25.turnOn();
+            pointlight26.turnOn();
+            pointlight27.turnOn();
+            pointlight28.turnOn();
+            pointlight29.turnOn();
+            pointlight30.turnOn();
+            pointlight31.turnOn();
+            pointlight32.turnOn();
             pointLightOn = !pointLightOn;
         }
     }
