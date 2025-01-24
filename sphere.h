@@ -1207,7 +1207,7 @@ public:
     glm::vec3 specular;
     float shininess;
     // ctor/dtor
-    CutCone(float radius = 1.0f, int sectorCount = 36, int stackCount = 18, glm::vec3 amb = glm::vec3(0.122, 0.361, 0.357), glm::vec3 diff = glm::vec3(0.122, 0.361, 0.357), glm::vec3 spec = glm::vec3(0.5f, 0.5f, 0.5f), float shiny = 32.0f) : verticesStride(24)
+    CutCone(float radius = 1.0f, int sectorCount = 36, int stackCount = 18, glm::vec3 amb = glm::vec3(0.0, 0.0, 0.5), glm::vec3 diff = glm::vec3(0.0, 0.0, 0.5), glm::vec3 spec = glm::vec3(0.5f, 0.5f, 0.5f), float shiny = 32.0f) : verticesStride(24)
     {
         set(radius, sectorCount, stackCount, amb, diff, spec, shiny);
         buildCoordinatesAndIndices();
